@@ -91,15 +91,15 @@ def _make_installed_row(
         def on_recipe(_btn):
             recipe_uc = GetRecipeContentUc(RecipeRepository())
             current_fs = FlatpakApi().get_override_filesystems(app.id)
+            current_sockets = FlatpakApi().get_override_sockets(app.id)
 
             def on_confirm(_user_scope, active_permission_list, _repo_id):
                 def run_overrides():
                     flatpak_api = FlatpakApi()
                     for perm, value in active_permission_list:
-                        if perm.is_filesystem():
-                            subprocess.run(
-                                flatpak_api.get_override_filesystem_call(app.id, value)
-                            )
+                        override_call = flatpak_api.get_recipe_override_call(app.id, perm, value)
+                        if override_call:
+                            subprocess.run(override_call)
 
                 threading.Thread(target=run_overrides, daemon=True).start()
 
@@ -112,6 +112,7 @@ def _make_installed_row(
                 confirm_label=_("Apply"),
                 show_scope=False,
                 filesystem_override_values=current_fs,
+                socket_override_values=current_sockets,
             )
             dialog.present(row.get_root())
 

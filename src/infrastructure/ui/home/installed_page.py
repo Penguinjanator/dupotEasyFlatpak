@@ -11,8 +11,8 @@ from domain.entity.appstream_short_entity import AppstreamShortEntity
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.local_apps_repository import LocalAppsRepository
-from infrastructure.ui.appstream.github_flatpak_dialog import (
-    open_github_flatpak_install_flow,
+from infrastructure.ui.appstream.forge_flatpak_dialog import (
+    open_forge_flatpak_install_flow,
 )
 from infrastructure.ui.shared.icons_shared import IconsShared
 from infrastructure.ui.shared.installed_list_shared import InstalledListShared
@@ -99,20 +99,22 @@ class InstalledPage(Gtk.Box):
         flatpak_btn.connect("clicked", self._on_open_flatpak_clicked)
         toolbar.append(flatpak_btn)
 
-        github_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-        github_box.append(IconsShared().get_icon_by_name(IconsShared.ICON_GITHUB))
-        github_box.append(Gtk.Label(label=_("Install GitHub Flatpak")))
-        github_btn = Gtk.Button()
-        github_btn.set_child(github_box)
-        github_btn.set_tooltip_text(_("Install GitHub Flatpak"))
-        github_btn.connect("clicked", self._on_install_github_flatpak_clicked)
-        toolbar.append(github_btn)
+        forge_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        forge_box.append(IconsShared().get_icon_by_name(IconsShared.ICON_GITHUB))
+        forge_box.append(Gtk.Label(label=_("Install from release")))
+        forge_btn = Gtk.Button()
+        forge_btn.set_child(forge_box)
+        forge_btn.set_tooltip_text(
+            _("Install a Flatpak from a GitHub, GitLab or Codeberg release")
+        )
+        forge_btn.connect("clicked", self._on_install_forge_flatpak_clicked)
+        toolbar.append(forge_btn)
 
         return toolbar
 
-    def _on_install_github_flatpak_clicked(self, _btn):
+    def _on_install_forge_flatpak_clicked(self, _btn):
         if self._on_open_flatpak:
-            open_github_flatpak_install_flow(self, self._on_open_flatpak)
+            open_forge_flatpak_install_flow(self, self._on_open_flatpak)
 
     def _on_open_flatpak_clicked(self, _btn):
         file_dialog = Gtk.FileDialog.new()
@@ -140,6 +142,15 @@ class InstalledPage(Gtk.Box):
 
     def _load(self):
         ids = self._flatpak_api.get_installed_app_id_list()
+        # Runtimes (e.g. app plugins/extensions) are only listed when we
+        # installed them ourselves from a forge release or a .flatpak file.
+        local_ids = {local_app.id.lower() for local_app in LocalAppsRepository().get_list()}
+        self._runtime_ids = {
+            runtime_id
+            for runtime_id in self._flatpak_api.get_installed_runtime_id_list()
+            if runtime_id.lower() in local_ids
+        }
+        ids += list(self._runtime_ids)
         GLib.idle_add(self._apply, ids)
 
     def _apply(self, ids: list):
@@ -200,6 +211,10 @@ class InstalledPage(Gtk.Box):
         if local_app:
             self._push_fn(
                 LocalAppDetailPage(
-                    app_id, local_app, self.refresh, self._on_open_flatpak
+                    app_id,
+                    local_app,
+                    self.refresh,
+                    self._on_open_flatpak,
+                    is_runtime=app_id in getattr(self, "_runtime_ids", set()),
                 )
             )

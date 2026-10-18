@@ -5,6 +5,7 @@ gi.require_version("Adw", "1")
 
 from gi.repository import Gtk, Adw
 
+from infrastructure.api.forge_api import get_forge_api
 from domain.entity.import_entity import ImportEntity
 from infrastructure.ui.shared.icons_shared import IconsShared
 
@@ -58,8 +59,13 @@ class ImportDialog(Adw.Dialog):
             if summary:
                 subtitle_parts.append(summary)
             subtitle_parts.append(item.installation_scope)
-            if item.is_from_github():
-                subtitle_parts.append(_("From GitHub"))
+            if item.is_from_forge():
+                forge_api = get_forge_api(item.source_url)
+                subtitle_parts.append(
+                    _("From {forge}").format(
+                        forge=forge_api.NAME if forge_api else item.source_url
+                    )
+                )
             elif not item.is_importable():
                 subtitle_parts.append(_("Can't import without a URL"))
             row.set_subtitle("  ·  ".join(subtitle_parts))

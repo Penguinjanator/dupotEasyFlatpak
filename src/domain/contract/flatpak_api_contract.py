@@ -15,6 +15,10 @@ class FlatpakApiContract:
         pass
 
     @abstractmethod
+    def get_installed_runtime_id_list(self) -> list[str]:
+        pass
+
+    @abstractmethod
     def get_installed_list(self) -> list[InstalledVersionEntity]:
         pass
 
@@ -52,6 +56,22 @@ class FlatpakApiContract:
 
     @abstractmethod
     def get_override_filesystems(self, app_id: str) -> list[str]:
+        pass
+
+    @abstractmethod
+    def get_override_socket_call(self, app_id: str, socket: str, enable: bool = True) -> list:
+        pass
+
+    @abstractmethod
+    def get_override_sockets(self, app_id: str) -> list[str]:
+        pass
+
+    @abstractmethod
+    def get_metadata_sockets(self, app_id: str) -> list[str]:
+        pass
+
+    @abstractmethod
+    def get_recipe_override_call(self, app_id: str, perm, value) -> list | None:
         pass
 
     @abstractmethod

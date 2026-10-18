@@ -2,20 +2,20 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-12 09:12+0200\n"
+"POT-Creation-Date: 2026-10-18 22:00+0200\n"
 "Language: es\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/infrastructure/api/flatpak_api.py:305
+#: src/infrastructure/api/flatpak_api.py:349
 msgid "The repository did not respond in time"
 msgstr "El repositorio no respondió a tiempo"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:15
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:51
-#: src/infrastructure/ui/appstream_page.py:174
-#: src/infrastructure/ui/shared/installed_list_shared.py:184
-#: src/infrastructure/ui/shared/installed_list_shared.py:198
+#: src/infrastructure/ui/appstream_page.py:175
+#: src/infrastructure/ui/shared/installed_list_shared.py:185
+#: src/infrastructure/ui/shared/installed_list_shared.py:199
 msgid "Downgrade"
 msgstr "Bajar versión"
 
@@ -24,19 +24,20 @@ msgid "Select a version to downgrade to"
 msgstr "Seleccione una versión a la que bajar"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:51
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:128
-#: src/infrastructure/ui/appstream/install_dialog.py:132
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:157
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:330
-#: src/infrastructure/ui/appstream_page.py:472
-#: src/infrastructure/ui/app_window.py:752
-#: src/infrastructure/ui/bundle_detail_page.py:279
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:212
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:56
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:132
+#: src/infrastructure/ui/appstream/install_dialog.py:148
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:162
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:344
+#: src/infrastructure/ui/appstream_page.py:473
+#: src/infrastructure/ui/app_window.py:706
+#: src/infrastructure/ui/bundle_detail_page.py:287
 #: src/infrastructure/ui/home/updates_page.py:183
 #: src/infrastructure/ui/home/updates_page.py:231
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:213
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:254
-#: src/infrastructure/ui/shared/installed_list_shared.py:149
+#: src/infrastructure/ui/shared/installed_list_shared.py:150
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -46,8 +47,8 @@ msgstr "Instalar .flatpak"
 
 # --- App detail page ---
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:122
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:116
-#: src/infrastructure/ui/appstream_page.py:249
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:118
+#: src/infrastructure/ui/appstream_page.py:250
 msgid "Details"
 msgstr "Detalles"
 
@@ -73,106 +74,129 @@ msgid "Installation"
 msgstr "Instalación"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:159
-#: src/infrastructure/ui/appstream/install_dialog.py:74
-#: src/infrastructure/ui/bundle_detail_page.py:72
+#: src/infrastructure/ui/appstream/install_dialog.py:75
+#: src/infrastructure/ui/bundle_detail_page.py:73
 msgid "Install for current user only"
 msgstr "Instalar solo para el usuario actual"
 
 # --- General actions ---
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:168
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:129
-#: src/infrastructure/ui/appstream/install_dialog.py:33
-#: src/infrastructure/ui/appstream/install_dialog.py:133
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:274
-#: src/infrastructure/ui/appstream_page.py:433
-#: src/infrastructure/ui/menu/import_dialog.py:93
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:223
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:133
+#: src/infrastructure/ui/appstream/install_dialog.py:34
+#: src/infrastructure/ui/appstream/install_dialog.py:149
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:281
+#: src/infrastructure/ui/appstream_page.py:434
+#: src/infrastructure/ui/menu/import_dialog.py:99
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:150
 #: src/infrastructure/ui/shared/app_list_line_shared.py:150
 msgid "Install"
 msgstr "Instalar"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:189
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:340
-#: src/infrastructure/ui/appstream_page.py:484
-#: src/infrastructure/ui/appstream_page.py:514
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:354
+#: src/infrastructure/ui/appstream_page.py:485
+#: src/infrastructure/ui/appstream_page.py:515
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:89
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:225
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:273
-#: src/infrastructure/ui/shared/installed_list_shared.py:159
+#: src/infrastructure/ui/shared/installed_list_shared.py:160
 msgid "Please wait…"
 msgstr "Por favor, espere…"
 
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:18
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:85
-msgid "Error"
-msgstr ""
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:205
+msgid "Replace the installed version?"
+msgstr "¿Reemplazar la versión instalada?"
 
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:19
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:90
-#: src/infrastructure/ui/bundle_detail_page.py:280
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:207
+#, python-brace-format
+msgid ""
+"This app is already installed from “{origin}”. It will be uninstalled first "
+"(your data is kept), then replaced by this file. If the install fails, the "
+"previous version is restored."
+msgstr ""
+"Esta aplicación ya está instalada desde «{origin}». Primero se desinstalará "
+"(tus datos se conservan) y luego se reemplazará por este archivo. Si la "
+"instalación falla, se restaurará la versión anterior."
+
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:213
+msgid "Replace"
+msgstr "Reemplazar"
+
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:19
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:89
+msgid "Error"
+msgstr "Error"
+
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:20
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:94
+#: src/infrastructure/ui/bundle_detail_page.py:288
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:126
 msgid "OK"
 msgstr "Aceptar"
 
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:30
-#: src/infrastructure/ui/home/installed_page.py:104
-#: src/infrastructure/ui/home/installed_page.py:107
-msgid "Install GitHub Flatpak"
-msgstr ""
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:32
+msgid "Install Flatpak from a release"
+msgstr "Instalar Flatpak desde una versión publicada"
 
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:32
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:35
 msgid ""
-"Enter the URL of a GitHub project that publishes a .flatpak release asset."
+"Enter the URL of a GitHub, GitLab or Codeberg project that publishes "
+"a .flatpak release asset."
 msgstr ""
+"Introduce la URL de un proyecto de GitHub, GitLab o Codeberg que publique un "
+"archivo .flatpak en sus versiones."
 
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:39
-msgid "GitHub URL"
-msgstr ""
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:44
+msgid "Project URL"
+msgstr "URL del proyecto"
 
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:52
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:57
 msgid "Find latest release"
-msgstr ""
+msgstr "Buscar la última versión"
 
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:69
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:170
-msgid "This doesn't look like a valid GitHub project URL."
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:73
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:175
+msgid "This doesn't look like a valid GitHub, GitLab or Codeberg project URL."
 msgstr ""
+"Esto no parece una URL válida de un proyecto de GitHub, GitLab o Codeberg."
 
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:87
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:91
 msgid "No release with a .flatpak asset was found for this project."
 msgstr ""
+"No se encontró ninguna versión con un archivo .flatpak para este proyecto."
 
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:108
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:112
 #, python-brace-format
 msgid "Version {version} was found for {owner}/{repo}."
-msgstr ""
+msgstr "Se encontró la versión {version} para {owner}/{repo}."
 
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:115
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:119
 msgid "Asset"
-msgstr ""
+msgstr "Archivo"
 
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:119
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:123
 msgid "Version"
-msgstr ""
+msgstr "Versión"
 
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:212
+#: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:226
 msgid "Failed to download a valid .flatpak file from this release."
-msgstr ""
-
-#: src/infrastructure/ui/appstream/install_dialog.py:58
-msgid "Repository"
-msgstr ""
+msgstr "No se pudo descargar un archivo .flatpak válido de esta versión."
 
 #: src/infrastructure/ui/appstream/install_dialog.py:59
-msgid "This app is available from several repositories"
-msgstr ""
+msgid "Repository"
+msgstr "Repositorio"
 
-#: src/infrastructure/ui/appstream/install_dialog.py:92
-#: src/infrastructure/ui/bundle_detail_page.py:221
+#: src/infrastructure/ui/appstream/install_dialog.py:60
+msgid "This app is available from several repositories"
+msgstr "Esta aplicación está disponible en varios repositorios"
+
+#: src/infrastructure/ui/appstream/install_dialog.py:93
+#: src/infrastructure/ui/bundle_detail_page.py:222
 msgid "Permissions"
 msgstr "Permisos"
 
-#: src/infrastructure/ui/appstream/install_dialog.py:154
+#: src/infrastructure/ui/appstream/install_dialog.py:170
 msgid "This repository only supports this scope"
 msgstr "Este repositorio solo admite este ámbito"
 
@@ -186,296 +210,298 @@ msgstr "Instalando…"
 msgid "Close"
 msgstr "Cerrar"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:119
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:121
 msgid "Source"
-msgstr ""
+msgstr "Origen"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:131
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:133
 msgid "Unknown — no releases available"
 msgstr "Desconocido — no hay releases disponibles"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:132
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:142
-msgid "Link to GitHub project"
-msgstr "Vincular a un proyecto de GitHub"
-
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:134
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:144
-msgid "Enter the URL of the GitHub project this app was installed from."
-msgstr ""
-"Introduzca la URL del proyecto de GitHub desde el que se instaló esta "
-"aplicación."
+msgid "Link to project"
+msgstr "Vincular a un proyecto"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:158
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:147
+msgid ""
+"Enter the URL of the GitHub, GitLab or Codeberg project this app was "
+"installed from."
+msgstr ""
+"Introduce la URL del proyecto de GitHub, GitLab o Codeberg desde el que se "
+"instaló esta aplicación."
+
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:163
 msgid "Link"
-msgstr ""
+msgstr "Vincular"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:191
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:197
 msgid "Releases"
-msgstr ""
+msgstr "Versiones"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:194
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:290
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:200
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:303
 msgid "Load more releases"
-msgstr ""
+msgstr "Cargar más versiones"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:201
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:213
-#: src/infrastructure/ui/app_window.py:92
-#: src/infrastructure/ui/shared/installed_list_shared.py:188
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:207
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:219
+#: src/infrastructure/ui/app_window.py:90
+#: src/infrastructure/ui/shared/installed_list_shared.py:189
 msgid "Loading…"
 msgstr "Cargando…"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:234
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:241
 msgid "No release with a .flatpak asset found"
-msgstr ""
-
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:245
-msgid "No description"
-msgstr ""
+msgstr "No se encontró ninguna versión con un archivo .flatpak"
 
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:252
-#: src/infrastructure/ui/app_window.py:274
+msgid "No description"
+msgstr "Sin descripción"
+
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:259
+#: src/infrastructure/ui/app_window.py:272
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:129
 #: src/infrastructure/ui/shared/app_list_line_shared.py:129
 msgid "Installed"
 msgstr "Instalado"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:260
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:267
 msgid "No release notes."
-msgstr ""
+msgstr "Sin notas de la versión."
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:274
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:281
 msgid "Reinstall"
-msgstr ""
+msgstr "Reinstalar"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:299
-#: src/infrastructure/ui/appstream_page.py:179
-#: src/infrastructure/ui/shared/installed_list_shared.py:122
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:313
+#: src/infrastructure/ui/appstream_page.py:180
+#: src/infrastructure/ui/shared/installed_list_shared.py:123
 msgid "Run"
 msgstr "Ejecutar"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:305
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:328
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:331
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:353
-#: src/infrastructure/ui/appstream_page.py:422
-#: src/infrastructure/ui/appstream_page.py:470
-#: src/infrastructure/ui/appstream_page.py:473
-#: src/infrastructure/ui/shared/installed_list_shared.py:128
-#: src/infrastructure/ui/shared/installed_list_shared.py:147
-#: src/infrastructure/ui/shared/installed_list_shared.py:150
-#: src/infrastructure/ui/shared/installed_list_shared.py:171
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:319
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:342
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:345
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:367
+#: src/infrastructure/ui/appstream_page.py:423
+#: src/infrastructure/ui/appstream_page.py:471
+#: src/infrastructure/ui/appstream_page.py:474
+#: src/infrastructure/ui/shared/installed_list_shared.py:129
+#: src/infrastructure/ui/shared/installed_list_shared.py:148
+#: src/infrastructure/ui/shared/installed_list_shared.py:151
+#: src/infrastructure/ui/shared/installed_list_shared.py:172
 msgid "Uninstall"
 msgstr "Desinstalar"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:321
-#: src/infrastructure/ui/appstream_page.py:463
-#: src/infrastructure/ui/shared/installed_list_shared.py:140
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:335
+#: src/infrastructure/ui/appstream_page.py:464
+#: src/infrastructure/ui/shared/installed_list_shared.py:141
 msgid "Delete application data"
 msgstr "Eliminar datos de la aplicación"
 
-#: src/infrastructure/ui/appstream_page.py:169
-#: src/infrastructure/ui/appstream_page.py:648
+#: src/infrastructure/ui/appstream_page.py:170
+#: src/infrastructure/ui/appstream_page.py:659
 #: src/infrastructure/ui/shared/installed_list_shared.py:111
 msgid "Recipe overrides"
 msgstr "Ajustes de receta"
 
-#: src/infrastructure/ui/appstream_page.py:188
+#: src/infrastructure/ui/appstream_page.py:189
 #: src/infrastructure/ui/shared/installed_list_shared.py:81
 msgid "Pinned to a specific version"
 msgstr "Fijado a una versión específica"
 
-#: src/infrastructure/ui/appstream_page.py:253
+#: src/infrastructure/ui/appstream_page.py:254
 msgid "License"
 msgstr "Licencia"
 
-#: src/infrastructure/ui/appstream_page.py:259
+#: src/infrastructure/ui/appstream_page.py:260
 msgid "Download Size"
 msgstr "Tamaño de descarga"
 
-#: src/infrastructure/ui/appstream_page.py:265
+#: src/infrastructure/ui/appstream_page.py:266
 msgid "Installed Size"
 msgstr "Tamaño instalado"
 
-#: src/infrastructure/ui/appstream_page.py:271
+#: src/infrastructure/ui/appstream_page.py:272
 msgid "Architectures"
 msgstr "Arquitecturas"
 
-#: src/infrastructure/ui/appstream_page.py:278
+#: src/infrastructure/ui/appstream_page.py:279
 msgid "Homepage"
 msgstr "Sitio web"
 
-#: src/infrastructure/ui/appstream_page.py:292
+#: src/infrastructure/ui/appstream_page.py:293
 msgid "Bug Tracker"
 msgstr "Rastreador de errores"
 
-#: src/infrastructure/ui/appstream_page.py:306
+#: src/infrastructure/ui/appstream_page.py:307
 msgid "Donate"
 msgstr "Donar"
 
-#: src/infrastructure/ui/appstream_page.py:321
+#: src/infrastructure/ui/appstream_page.py:322
 msgid "Description"
 msgstr "Descripción"
 
-#: src/infrastructure/ui/appstream_page.py:431
+#: src/infrastructure/ui/appstream_page.py:432
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:150
 #: src/infrastructure/ui/shared/app_list_line_shared.py:150
 msgid "Install with recipe"
 msgstr "Instalar con receta"
 
-#: src/infrastructure/ui/appstream_page.py:649
+#: src/infrastructure/ui/appstream_page.py:660
 #: src/infrastructure/ui/shared/installed_list_shared.py:112
 msgid "Apply"
 msgstr "Aplicar"
 
-#: src/infrastructure/ui/appstream_page.py:667
+#: src/infrastructure/ui/appstream_page.py:679
 msgid "Screenshots"
 msgstr "Capturas de pantalla"
 
-#: src/infrastructure/ui/appstream_page.py:867
+#: src/infrastructure/ui/appstream_page.py:879
 msgid "Release History"
 msgstr "Historial de versiones"
 
-#: src/infrastructure/ui/app_window.py:134
+#: src/infrastructure/ui/app_window.py:132
 msgid "Finishing setup — syncing catalog and icons…"
 msgstr "Finalizando la configuración: sincronizando catálogo e iconos…"
 
 # --- Navigation / window ---
-#: src/infrastructure/ui/app_window.py:172
+#: src/infrastructure/ui/app_window.py:170
 msgid "Easy flatpak"
 msgstr "Easy flatpak"
 
-#: src/infrastructure/ui/app_window.py:181
+#: src/infrastructure/ui/app_window.py:179
 #: src/infrastructure/ui/menu/parameters_dialog.py:29
 msgid "Parameters"
 msgstr "Parámetros"
 
-#: src/infrastructure/ui/app_window.py:182
-#: src/infrastructure/ui/app_window.py:530
+#: src/infrastructure/ui/app_window.py:180
+#: src/infrastructure/ui/app_window.py:533
 #: src/infrastructure/ui/home/installed_page.py:75
 #: src/infrastructure/ui/home/installed_page.py:78
-#: src/infrastructure/ui/menu/import_dialog.py:16
+#: src/infrastructure/ui/menu/import_dialog.py:17
 msgid "Import"
 msgstr "Importar"
 
-#: src/infrastructure/ui/app_window.py:183
-#: src/infrastructure/ui/app_window.py:676
+#: src/infrastructure/ui/app_window.py:181
+#: src/infrastructure/ui/app_window.py:630
 #: src/infrastructure/ui/home/installed_page.py:85
 #: src/infrastructure/ui/home/installed_page.py:88
 msgid "Export"
 msgstr "Exportar"
 
-#: src/infrastructure/ui/app_window.py:184
-#: src/infrastructure/ui/app_window.py:512
+#: src/infrastructure/ui/app_window.py:182
+#: src/infrastructure/ui/app_window.py:515
 #: src/infrastructure/ui/home/installed_page.py:95
 #: src/infrastructure/ui/home/installed_page.py:98
-#: src/infrastructure/ui/home/installed_page.py:119
+#: src/infrastructure/ui/home/installed_page.py:121
 msgid "Install local Flatpak"
 msgstr "Instalar Flatpak local"
 
-#: src/infrastructure/ui/app_window.py:185
+#: src/infrastructure/ui/app_window.py:183
 #: src/infrastructure/ui/menu/tools_dialog.py:18
 msgid "Tools"
 msgstr "Herramientas"
 
-#: src/infrastructure/ui/app_window.py:187
+#: src/infrastructure/ui/app_window.py:185
 msgid "About"
 msgstr "Acerca de"
 
-#: src/infrastructure/ui/app_window.py:245
+#: src/infrastructure/ui/app_window.py:243
 msgid "Home"
 msgstr "Inicio"
 
-#: src/infrastructure/ui/app_window.py:253
+#: src/infrastructure/ui/app_window.py:251
 msgid "Categories"
 msgstr "Categorías"
 
-#: src/infrastructure/ui/app_window.py:260
+#: src/infrastructure/ui/app_window.py:258
 msgid "Bundles"
 msgstr "Paquetes"
 
-#: src/infrastructure/ui/app_window.py:293
+#: src/infrastructure/ui/app_window.py:291
 msgid "Updates"
 msgstr "Actualizaciones"
 
-#: src/infrastructure/ui/app_window.py:316
+#: src/infrastructure/ui/app_window.py:318
 msgid "Pending"
 msgstr "Pendiente"
 
-#: src/infrastructure/ui/app_window.py:346
+#: src/infrastructure/ui/app_window.py:348
 #, python-brace-format
 msgid "{name} is installing — track progress in Pending"
 msgstr "{name} se está instalando — sigue el progreso en Pendiente"
 
-#: src/infrastructure/ui/app_window.py:385
+#: src/infrastructure/ui/app_window.py:388
 msgid "New"
 msgstr "Nuevo"
 
-#: src/infrastructure/ui/app_window.py:386
+#: src/infrastructure/ui/app_window.py:389
 msgid "Updated"
 msgstr "Actualizado"
 
 # --- Home sections ---
-#: src/infrastructure/ui/app_window.py:387
+#: src/infrastructure/ui/app_window.py:390
 msgid "Trending"
 msgstr "Tendencias"
 
-#: src/infrastructure/ui/app_window.py:388
+#: src/infrastructure/ui/app_window.py:391
 msgid "Popular"
 msgstr "Popular"
 
-#: src/infrastructure/ui/app_window.py:514
-#: src/infrastructure/ui/home/installed_page.py:121
+#: src/infrastructure/ui/app_window.py:517
+#: src/infrastructure/ui/home/installed_page.py:123
 msgid "Flatpak files"
 msgstr "Archivos Flatpak"
 
-#: src/infrastructure/ui/app_window.py:549
+#: src/infrastructure/ui/app_window.py:552
 #, python-brace-format
 msgid "Invalid import file: {error}"
 msgstr "Archivo de importación no válido: {error}"
 
-#: src/infrastructure/ui/app_window.py:554
+#: src/infrastructure/ui/app_window.py:557
 msgid "Nothing to import"
 msgstr "Nada que importar"
 
-#: src/infrastructure/ui/app_window.py:705
+#: src/infrastructure/ui/app_window.py:659
 msgid "Export saved"
 msgstr "Exportación guardada"
 
-#: src/infrastructure/ui/app_window.py:746
+#: src/infrastructure/ui/app_window.py:700
 msgid "Processes still running"
 msgstr "Procesos en ejecución"
 
-#: src/infrastructure/ui/app_window.py:749
+#: src/infrastructure/ui/app_window.py:703
 msgid ""
 "Some installations are still in progress. Are you sure you want to close?"
 msgstr "Algunas instalaciones están en curso. ¿Seguro que quieres cerrar?"
 
-#: src/infrastructure/ui/app_window.py:753
+#: src/infrastructure/ui/app_window.py:707
 msgid "Close anyway"
 msgstr "Cerrar de todas formas"
 
-#: src/infrastructure/ui/bundle_detail_page.py:56
-#: src/infrastructure/ui/bundle_detail_page.py:191
+#: src/infrastructure/ui/bundle_detail_page.py:57
+#: src/infrastructure/ui/bundle_detail_page.py:192
 msgid "Edit bundle"
 msgstr "Editar paquete"
 
-#: src/infrastructure/ui/bundle_detail_page.py:76
+#: src/infrastructure/ui/bundle_detail_page.py:77
 msgid "Install selected"
 msgstr "Instalar seleccionado"
 
-#: src/infrastructure/ui/bundle_detail_page.py:146
+#: src/infrastructure/ui/bundle_detail_page.py:147
 msgid "Edit permissions"
 msgstr "Editar permisos"
 
-#: src/infrastructure/ui/bundle_detail_page.py:181
-#: src/infrastructure/ui/bundle_detail_page.py:259
-#: src/infrastructure/ui/menu/import_dialog.py:114
+#: src/infrastructure/ui/bundle_detail_page.py:182
+#: src/infrastructure/ui/bundle_detail_page.py:267
 #: src/infrastructure/ui/menu/import_dialog.py:120
+#: src/infrastructure/ui/menu/import_dialog.py:126
 msgid "Already installed"
 msgstr "Ya instalado"
 
-#: src/infrastructure/ui/bundle_detail_page.py:191
+#: src/infrastructure/ui/bundle_detail_page.py:192
 #: src/infrastructure/ui/home/pending_list_page.py:195
 #: src/infrastructure/ui/home/pending_list_page.py:312
 msgid "Done"
@@ -489,9 +515,17 @@ msgstr "Buscar…"
 msgid "No installed applications found"
 msgstr "No se encontraron aplicaciones instaladas"
 
-#: src/infrastructure/ui/home/installed_page.py:180
+#: src/infrastructure/ui/home/installed_page.py:104
+msgid "Install from release"
+msgstr "Instalar desde una versión"
+
+#: src/infrastructure/ui/home/installed_page.py:108
+msgid "Install a Flatpak from a GitHub, GitLab or Codeberg release"
+msgstr "Instalar un Flatpak desde una versión de GitHub, GitLab o Codeberg"
+
+#: src/infrastructure/ui/home/installed_page.py:191
 msgid "Installed from a local .flatpak file"
-msgstr ""
+msgstr "Instalada desde un archivo .flatpak local"
 
 #: src/infrastructure/ui/home/pending_list_page.py:84
 #: src/infrastructure/ui/home/pending_list_page.py:125
@@ -537,7 +571,7 @@ msgstr "Entornos de ejecución"
 
 #: src/infrastructure/ui/home/updates_page.py:75
 #: src/infrastructure/ui/home/updates_page.py:173
-#: src/infrastructure/ui/menu/import_dialog.py:29
+#: src/infrastructure/ui/menu/import_dialog.py:30
 msgid "Select all"
 msgstr "Seleccionar todo"
 
@@ -604,6 +638,8 @@ msgid ""
 "For an OCI registry (e.g. Fedora), include the oci+ prefix: oci+https://"
 "registry.fedoraproject.org"
 msgstr ""
+"Para un registro OCI (p. ej., Fedora), incluye el prefijo oci+: oci+https://"
+"registry.fedoraproject.org"
 
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:65
 #: src/infrastructure/ui/menu/parameters_dialog.py:43
@@ -715,17 +751,18 @@ msgstr "Error al añadir el repositorio"
 msgid "Couldn't add repository"
 msgstr "No se pudo añadir el repositorio"
 
-#: src/infrastructure/ui/menu/import_dialog.py:33
+#: src/infrastructure/ui/menu/import_dialog.py:34
 msgid "Unselect all"
 msgstr "Deseleccionar todo"
 
-#: src/infrastructure/ui/menu/import_dialog.py:62
-msgid "From GitHub"
-msgstr ""
+#: src/infrastructure/ui/menu/import_dialog.py:65
+#, python-brace-format
+msgid "From {forge}"
+msgstr "Desde {forge}"
 
-#: src/infrastructure/ui/menu/import_dialog.py:64
-#: src/infrastructure/ui/menu/import_dialog.py:76
-#: src/infrastructure/ui/menu/import_dialog.py:83
+#: src/infrastructure/ui/menu/import_dialog.py:70
+#: src/infrastructure/ui/menu/import_dialog.py:82
+#: src/infrastructure/ui/menu/import_dialog.py:89
 msgid "Can't import without a URL"
 msgstr "No se puede importar sin una URL"
 
@@ -808,7 +845,7 @@ msgstr "Buscar"
 
 #: src/infrastructure/ui/shared/repo_filter_bar_shared.py:51
 msgid "All"
-msgstr ""
+msgstr "Todos"
 
 #: src/main.py:200
 msgid "Setting up…"
@@ -867,6 +904,12 @@ msgstr "Instalar MangoHud"
 msgid "recipe_enable_mangohud"
 msgstr "Activar MangoHud"
 
+msgid "recipe_allow_sound_label"
+msgstr "Permitir el sonido (PulseAudio)"
+
+msgid "recipe_should_install_openrgb_effects_plugin"
+msgstr "Instalar el plugin OpenRGB Effects"
+
 msgid "Gaming"
 msgstr "Juegos"
 
@@ -903,6 +946,14 @@ msgstr "rumano"
 
 msgid "german"
 msgstr "alemán"
+
+#~ msgid "Link to GitHub project"
+#~ msgstr "Vincular a un proyecto de GitHub"
+
+#~ msgid "Enter the URL of the GitHub project this app was installed from."
+#~ msgstr ""
+#~ "Introduzca la URL del proyecto de GitHub desde el que se instaló esta "
+#~ "aplicación."
 
 #~ msgid "Import / Export"
 #~ msgstr "Importar / Exportar"

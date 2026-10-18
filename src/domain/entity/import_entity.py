@@ -19,7 +19,7 @@ class ImportEntity:
         self.overrides_filesystem_list = raw_obj.get(
             ExportEntity.FIELD_OVERRIDE_FILESYSTEM, []
         )
-        # Set only for apps with no repo of ours (installed from a GitHub
+        # Set only for apps with no repo of ours (installed from a GitHub/GitLab/Codeberg
         # release) — reinstalled from there instead of a plain repo install.
         self.source_url = raw_obj.get(ExportEntity.FIELD_SOURCE_URL, "")
         # Set by ImportUc.get_appstream_list() when a matching row exists
@@ -27,14 +27,14 @@ class ImportEntity:
         # installed from.
         self.found_in_catalog = False
 
-    def is_from_github(self) -> bool:
+    def is_from_forge(self) -> bool:
         return bool(self.source_url)
 
     def is_importable(self) -> bool:
-        # No repo of ours and no GitHub source either — a plain
+        # No repo of ours and no forge source either — a plain
         # "flatpak install flathub <app_id>" would just fail for this one
         # (e.g. an older export, or a hand-edited import file).
-        return self.found_in_catalog or self.is_from_github()
+        return self.found_in_catalog or self.is_from_forge()
 
     def has_recipe_override_filesystem(self) -> bool:
         if len(self.overrides_filesystem_list) > 0:

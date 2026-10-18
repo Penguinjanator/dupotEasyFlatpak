@@ -11,10 +11,10 @@ from gi.repository import Adw, GLib, Gtk
 from domain.conf.path_conf import PathConf
 from domain.entity.local_app_entity import LocalAppEntity
 from infrastructure.api.flatpak_api import FlatpakApi
-from infrastructure.api.github_api import GithubApi
+from infrastructure.api.forge_api import parse_forge_url
 from infrastructure.repository.local_apps_repository import LocalAppsRepository
 from infrastructure.ui.shared.icons_shared import IconsShared
-from infrastructure.ui.appstream.github_flatpak_dialog import (
+from infrastructure.ui.appstream.forge_flatpak_dialog import (
     _show_error,
     download_and_open_install_page,
 )
@@ -22,7 +22,7 @@ from infrastructure.ui.appstream.github_flatpak_dialog import (
 
 class LocalAppDetailPage(Adw.NavigationPage):
     """Minimal detail page for apps installed from a local .flatpak file or a
-    GitHub release — they have no row in the Flathub appstream DB, so this
+    GitHub/GitLab/Codeberg release — they have no row in the Flathub appstream DB, so this
     only shows what LocalAppsRepository tracked at install time."""
 
     RELEASES_PAGE_SIZE = 10
@@ -33,8 +33,10 @@ class LocalAppDetailPage(Adw.NavigationPage):
         local_app: LocalAppEntity,
         on_uninstalled_fn=None,
         on_open_flatpak_fn=None,
+        is_runtime: bool = False,  # extension/plugin — nothing to run
     ):
         super().__init__()
+        self._is_runtime = is_runtime
         self._app_id = app_id
         self._local_app = local_app
         self._on_uninstalled_fn = on_uninstalled_fn
@@ -66,9 +68,9 @@ class LocalAppDetailPage(Adw.NavigationPage):
         content_box.append(self._build_details_group())
         content_box.append(self._build_buttons())
 
-        owner_repo = GithubApi().parse_owner_repo(self._local_app.url)
-        if owner_repo:
-            content_box.append(self._build_releases_group(*owner_repo))
+        forge = parse_forge_url(self._local_app.url)
+        if forge:
+            content_box.append(self._build_releases_group(*forge))
 
         clamp.set_child(content_box)
         scroll.set_child(clamp)
@@ -127,21 +129,24 @@ class LocalAppDetailPage(Adw.NavigationPage):
             # Origin unknown — most likely this app's tracked info was lost
             # (e.g. local app data was reset) while the flatpak itself
             # stayed installed. Flatpak keeps no memory of a bundle's
-            # original GitHub project, so offer to re-link it manually.
+            # original project, so offer to re-link it manually.
             source_row.set_subtitle(_("Unknown — no releases available"))
-            link_btn = Gtk.Button(label=_("Link to GitHub project"))
+            link_btn = Gtk.Button(label=_("Link to project"))
             link_btn.set_valign(Gtk.Align.CENTER)
             link_btn.add_css_class("flat")
-            link_btn.connect("clicked", self._on_link_github_clicked)
+            link_btn.connect("clicked", self._on_link_project_clicked)
             source_row.add_suffix(link_btn)
         group.add(source_row)
 
         return group
 
-    def _on_link_github_clicked(self, _btn):
-        dialog = Adw.AlertDialog(heading=_("Link to GitHub project"))
+    def _on_link_project_clicked(self, _btn):
+        dialog = Adw.AlertDialog(heading=_("Link to project"))
         dialog.set_body(
-            _("Enter the URL of the GitHub project this app was installed from.")
+            _(
+                "Enter the URL of the GitHub, GitLab or Codeberg project "
+                "this app was installed from."
+            )
         )
 
         entry = Gtk.Entry()
@@ -164,10 +169,10 @@ class LocalAppDetailPage(Adw.NavigationPage):
             if response != "link":
                 return
             url = entry.get_text().strip()
-            if not GithubApi().parse_owner_repo(url):
+            if not parse_forge_url(url):
                 _show_error(
                     self,
-                    _("This doesn't look like a valid GitHub project URL."),
+                    _("This doesn't look like a valid GitHub, GitLab or Codeberg project URL."),
                 )
                 return
 
@@ -180,7 +185,8 @@ class LocalAppDetailPage(Adw.NavigationPage):
         dialog.connect("response", on_response)
         dialog.present(self)
 
-    def _build_releases_group(self, owner: str, repo: str) -> Gtk.Widget:
+    def _build_releases_group(self, forge_api, owner: str, repo: str) -> Gtk.Widget:
+        self._releases_api = forge_api
         self._releases_owner = owner
         self._releases_repo = repo
         self._releases_page = 0
@@ -212,12 +218,13 @@ class LocalAppDetailPage(Adw.NavigationPage):
         self._load_more_btn.set_sensitive(False)
         self._load_more_btn.set_label(_("Loading…"))
 
+        forge_api = self._releases_api
         owner = self._releases_owner
         repo = self._releases_repo
         next_page = self._releases_page + 1
 
         def fetch():
-            releases = GithubApi().get_releases_with_flatpak_asset(
+            releases = forge_api.get_releases_with_flatpak_asset(
                 owner, repo, self.RELEASES_PAGE_SIZE, next_page
             )
             GLib.idle_add(self._on_releases_page_loaded, owner, repo, releases)
@@ -278,7 +285,13 @@ class LocalAppDetailPage(Adw.NavigationPage):
                 install_btn.connect(
                     "clicked",
                     lambda _b, ri=release_info: download_and_open_install_page(
-                        self, owner, repo, ri, self._on_open_flatpak_fn
+                        self,
+                        self._releases_api,
+                        owner,
+                        repo,
+                        ri,
+                        self._on_open_flatpak_fn,
+
                     ),
                 )
                 row.add_suffix(install_btn)
@@ -296,11 +309,12 @@ class LocalAppDetailPage(Adw.NavigationPage):
         btn_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         btn_box.set_halign(Gtk.Align.CENTER)
 
-        run_btn = Gtk.Button(label=_("Run"))
-        run_btn.add_css_class("suggested-action")
-        run_btn.add_css_class("pill")
-        run_btn.connect("clicked", lambda _: FlatpakApi().run_by_id(self._app_id))
-        btn_box.append(run_btn)
+        if not self._is_runtime:
+            run_btn = Gtk.Button(label=_("Run"))
+            run_btn.add_css_class("suggested-action")
+            run_btn.add_css_class("pill")
+            run_btn.connect("clicked", lambda _: FlatpakApi().run_by_id(self._app_id))
+            btn_box.append(run_btn)
 
         self._uninstall_btn = Gtk.Button(label=_("Uninstall"))
         self._uninstall_btn.add_css_class("destructive-action")

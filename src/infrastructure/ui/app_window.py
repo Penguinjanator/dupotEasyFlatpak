@@ -11,6 +11,7 @@ from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.ui.appstream_page import AppstreamPage
 from infrastructure.ui.home.bundle_page import BundlePage
 from infrastructure.ui.home.category_page import CategoryPage
+from infrastructure.service.forge_install_service import install_latest_forge_flatpak
 from infrastructure.service.install_queue_service import InstallQueueService
 from infrastructure.ui.home.installed_page import InstalledPage
 from infrastructure.ui.home.pending_list_page import PendingPage
@@ -20,8 +21,6 @@ from infrastructure.ui.menu.import_dialog import ImportDialog
 from infrastructure.ui.menu.parameters_dialog import ParametersDialog
 from infrastructure.ui.menu.tools_dialog import ToolsDialog
 from infrastructure.api.flatpak_api import FlatpakApi
-from infrastructure.api.github_api import GithubApi
-from infrastructure.repository.local_apps_repository import LocalAppsRepository
 from infrastructure.repository.recipe_repository import RecipeRepository
 from infrastructure.ui.appstream.flatpak_file_page import FlatpakFilePage
 from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
@@ -33,7 +32,6 @@ gi.require_version("Adw", "1")
 import json
 import os
 import subprocess
-import tempfile
 import threading
 
 from gi.repository import Gdk, Gio, Gtk, Adw, GLib
@@ -585,17 +583,17 @@ class MainWindow(Adw.ApplicationWindow):
         filtered = import_uc.get_filtered_list(import_list, selected_ids)
 
         # Apps exported with a source_url have no repo of ours — they were
-        # installed from a GitHub release, so they're reinstalled from
+        # installed from a GitHub/GitLab/Codeberg release, so they're reinstalled from
         # there instead of going through a normal "flatpak install".
-        github_items = [i for i in filtered if i.is_from_github()]
-        standard_items = [i for i in filtered if not i.is_from_github()]
+        forge_items = [i for i in filtered if i.is_from_forge()]
+        standard_items = [i for i in filtered if not i.is_from_forge()]
 
         process_call_list = import_uc.process(standard_items)
         for import_loop, process_call in zip(standard_items, process_call_list):
             self._run_import_process_call(import_loop, process_call)
 
-        for import_loop in github_items:
-            self._run_github_import(import_loop)
+        for import_loop in forge_items:
+            self._run_forge_import(import_loop)
 
     def _run_import_process_call(self, import_loop, process_call):
         app_name = getattr(import_loop, "name", None) or import_loop.app_id
@@ -614,67 +612,18 @@ class MainWindow(Adw.ApplicationWindow):
             queue_item.set_status, "done" if process.returncode == 0 else "failed"
         )
 
-    def _run_github_import(self, import_loop):
+    def _run_forge_import(self, import_loop):
         app_name = getattr(import_loop, "name", None) or import_loop.app_id
         queue_item = InstallQueueService().enqueue(
             import_loop.app_id, app_name, show_output_default=True
         )
 
-        def fail(message: str):
-            GLib.idle_add(queue_item.append_output, message + "\n")
-            GLib.idle_add(queue_item.set_status, "failed")
-
-        github_api = GithubApi()
-        parsed = github_api.parse_owner_repo(import_loop.source_url)
-        if not parsed:
-            fail(f"Invalid GitHub URL: {import_loop.source_url}")
-            return
-        owner, repo = parsed
-
-        release_info = github_api.get_latest_release_flatpak_asset(owner, repo)
-        if not release_info:
-            fail(f"No .flatpak release found for {owner}/{repo}")
-            return
-
-        # Must live under the cache dir (bind-mounted to the same host
-        # path), not /tmp: when running as a Flatpak, /tmp is a private
-        # sandbox tmpfs invisible to `flatpak install` run on the host via
-        # flatpak-spawn --host.
-        downloads_dir = os.path.join(GLib.get_user_cache_dir(), "downloads")
-        os.makedirs(downloads_dir, exist_ok=True)
-        tmp_dir = tempfile.mkdtemp(dir=downloads_dir)
-        tmp_path = os.path.join(tmp_dir, release_info["asset_name"])
-
-        GLib.idle_add(
-            queue_item.append_output,
-            f"Downloading {release_info['asset_name']} from {owner}/{repo}…\n",
+        ok = install_latest_forge_flatpak(
+            import_loop.source_url,
+            f"--{import_loop.installation_scope}",
+            lambda line: GLib.idle_add(queue_item.append_output, line),
         )
-        if not github_api.download_asset(release_info["download_url"], tmp_path):
-            fail("Download failed")
-            return
-
-        flatpak_api = FlatpakApi()
-        flags = [f"--{import_loop.installation_scope}"]
-        process = subprocess.Popen(
-            flatpak_api.get_install_bundle_call(tmp_path, *flags),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-        )
-        for line in process.stdout:
-            GLib.idle_add(queue_item.append_output, line)
-        process.wait()
-
-        if process.returncode == 0:
-            bundle_info = flatpak_api.get_flatpak_bundle_info(tmp_path)
-            app_id = bundle_info.get("name") or import_loop.app_id
-            LocalAppsRepository().insert_or_update(
-                app_id, repo, import_loop.source_url, release_info["tag_name"]
-            )
-
-        GLib.idle_add(
-            queue_item.set_status, "done" if process.returncode == 0 else "failed"
-        )
+        GLib.idle_add(queue_item.set_status, "done" if ok else "failed")
 
     def _on_menu_export(self, _action, _param):
         file_dialog = Gtk.FileDialog.new()

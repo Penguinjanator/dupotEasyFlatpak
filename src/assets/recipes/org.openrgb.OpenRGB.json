@@ -1,0 +1,17 @@
+{
+    "title": "OpenRGB",
+    "description": "Open source RGB lighting control.",
+    "flatpak": "org.openrgb.OpenRGB",
+    "flatpakPermissionToOverrideList": [
+        {
+            "label": "recipe_should_install_openrgb_effects_plugin",
+            "type": "install_forge_flatpak_yesno",
+            "value": "https://codeberg.org/OpenRGB/OpenRGBEffectsPlugin"
+        },
+        {
+            "label": "recipe_allow_sound_label",
+            "type": "sound",
+            "value": "pulseaudio"
+        }
+    ]
+}

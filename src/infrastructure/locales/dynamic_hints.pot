@@ -49,6 +49,12 @@ msgstr ""
 msgid "recipe_enable_mangohud"
 msgstr ""
 
+msgid "recipe_allow_sound_label"
+msgstr ""
+
+msgid "recipe_should_install_openrgb_effects_plugin"
+msgstr ""
+
 
 msgid "Gaming"
 msgstr ""

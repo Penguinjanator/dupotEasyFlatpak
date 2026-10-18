@@ -1,4 +1,5 @@
 import os
+import shutil
 import tempfile
 import threading
 
@@ -10,7 +11,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, GLib, Gtk
 
 from infrastructure.api.flatpak_api import FlatpakApi
-from infrastructure.api.github_api import GithubApi
+from infrastructure.api.forge_api import parse_forge_url
 from infrastructure.repository.local_apps_repository import LocalAppsRepository
 
 
@@ -20,23 +21,27 @@ def _show_error(parent_widget, message: str):
     dialog.present(parent_widget.get_root())
 
 
-class GithubFlatpakUrlDialog(Adw.AlertDialog):
-    """Step 1: ask for a GitHub project URL, look up its latest release."""
+class ForgeFlatpakUrlDialog(Adw.AlertDialog):
+    """Step 1: ask for a GitHub/GitLab/Codeberg project URL, look up its
+    latest release."""
 
     def __init__(self, on_ready):
         super().__init__()
-        self._on_ready = on_ready  # callable(owner, repo, release_info)
+        self._on_ready = on_ready  # callable(api, owner, repo, release_info)
 
-        self.set_heading(_("Install GitHub Flatpak"))
+        self.set_heading(_("Install Flatpak from a release"))
         self.set_body(
-            _("Enter the URL of a GitHub project that publishes a .flatpak release asset.")
+            _(
+                "Enter the URL of a GitHub, GitLab or Codeberg project that "
+                "publishes a .flatpak release asset."
+            )
         )
 
         form_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         form_box.set_margin_top(8)
         form_box.set_size_request(500, -1)
 
-        url_row = Adw.ActionRow(title=_("GitHub URL"))
+        url_row = Adw.ActionRow(title=_("Project URL"))
         self._url_entry = Gtk.Entry()
         self._url_entry.set_valign(Gtk.Align.CENTER)
         self._url_entry.set_hexpand(True)
@@ -61,25 +66,24 @@ class GithubFlatpakUrlDialog(Adw.AlertDialog):
             return
 
         url = self._url_entry.get_text().strip()
-        github_api = GithubApi()
-        parsed = github_api.parse_owner_repo(url)
+        parsed = parse_forge_url(url)
         if not parsed:
             _show_error(
                 self._url_entry,
-                _("This doesn't look like a valid GitHub project URL."),
+                _("This doesn't look like a valid GitHub, GitLab or Codeberg project URL."),
             )
             return
 
-        owner, repo = parsed
+        forge_api, owner, repo = parsed
         parent = self._url_entry.get_root()
 
         def fetch():
-            release_info = github_api.get_latest_release_flatpak_asset(owner, repo)
-            GLib.idle_add(self._on_fetched, owner, repo, release_info, parent)
+            release_info = forge_api.get_latest_release_flatpak_asset(owner, repo)
+            GLib.idle_add(self._on_fetched, forge_api, owner, repo, release_info, parent)
 
         threading.Thread(target=fetch, daemon=True).start()
 
-    def _on_fetched(self, owner, repo, release_info, parent):
+    def _on_fetched(self, forge_api, owner, repo, release_info, parent):
         if not release_info:
             error_dialog = Adw.AlertDialog(
                 heading=_("Error"),
@@ -91,11 +95,11 @@ class GithubFlatpakUrlDialog(Adw.AlertDialog):
             error_dialog.present(parent)
             return GLib.SOURCE_REMOVE
 
-        self._on_ready(owner, repo, release_info)
+        self._on_ready(forge_api, owner, repo, release_info)
         return GLib.SOURCE_REMOVE
 
 
-class GithubFlatpakConfirmDialog(Adw.AlertDialog):
+class ForgeFlatpakConfirmDialog(Adw.AlertDialog):
     """Step 2: show the release found and confirm before downloading it."""
 
     def __init__(self, owner: str, repo: str, release_info: dict, on_confirm):
@@ -138,39 +142,44 @@ class GithubFlatpakConfirmDialog(Adw.AlertDialog):
             self._on_confirm(self._release_info)
 
 
-def open_github_flatpak_install_flow(parent_widget, on_open_flatpak_fn):
+def open_forge_flatpak_install_flow(parent_widget, on_open_flatpak_fn):
     """Entry point: wires the two-step dialog + download to the same
     on_open_flatpak callback used for installing a local .flatpak file
     (AppWindow.open_flatpak_file -> FlatpakFilePage)."""
 
-    def on_ready(owner, repo, release_info):
+    def on_ready(forge_api, owner, repo, release_info):
         LocalAppsRepository().insert_or_update_deduped(
             f"{owner}/{repo}",
             repo,
-            f"https://github.com/{owner}/{repo}",
+            forge_api.project_url(owner, repo),
             release_info["tag_name"],
         )
 
         def on_confirm(confirmed_release_info):
             download_and_open_install_page(
-                parent_widget, owner, repo, confirmed_release_info, on_open_flatpak_fn
+                parent_widget,
+                forge_api,
+                owner,
+                repo,
+                confirmed_release_info,
+                on_open_flatpak_fn,
             )
 
-        GithubFlatpakConfirmDialog(owner, repo, release_info, on_confirm).present(
+        ForgeFlatpakConfirmDialog(owner, repo, release_info, on_confirm).present(
             parent_widget.get_root()
         )
 
-    GithubFlatpakUrlDialog(on_ready).present(parent_widget.get_root())
+    ForgeFlatpakUrlDialog(on_ready).present(parent_widget.get_root())
 
 
 def download_and_open_install_page(
-    parent_widget, owner, repo, release_info, on_open_flatpak_fn
+    parent_widget, forge_api, owner, repo, release_info, on_open_flatpak_fn
 ):
     """Download a specific release's .flatpak asset and hand it to the
     existing local-.flatpak install page. Shared by the "install latest"
     flow and the release list on LocalAppDetailPage."""
     def run():
-        # Keep the exact GitHub asset filename (shown in FlatpakFilePage's
+        # Keep the exact release asset filename (shown in FlatpakFilePage's
         # "File" row and used as the app-id fallback) instead of a random
         # mkstemp hash — put it in its own temp dir to avoid collisions.
         # Must live under the cache dir (bind-mounted to the same host path),
@@ -182,16 +191,18 @@ def download_and_open_install_page(
         tmp_dir = tempfile.mkdtemp(dir=downloads_dir)
         tmp_path = os.path.join(tmp_dir, release_info["asset_name"])
 
-        ok = GithubApi().download_asset(release_info["download_url"], tmp_path)
+        ok = forge_api.download_asset(release_info["download_url"], tmp_path)
 
         app_id = None
         if ok:
             # A non-empty download that isn't actually a valid flatpak
             # bundle (corrupt file, HTML error page, ...) must not be
             # allowed through to the install step either.
+            # "name" always has a filename-derived fallback; only a real
+            # bundle carries a "ref".
             bundle_info = FlatpakApi().get_flatpak_bundle_info(tmp_path)
             app_id = bundle_info.get("name")
-            if not app_id:
+            if not bundle_info.get("ref"):
                 ok = False
             else:
                 # Also register under the real flatpak app-id (distinct
@@ -201,9 +212,12 @@ def download_and_open_install_page(
                 LocalAppsRepository().insert_or_update(
                     app_id,
                     repo,
-                    f"https://github.com/{owner}/{repo}",
+                    forge_api.project_url(owner, repo),
                     release_info["tag_name"],
                 )
+
+        if not ok:
+            shutil.rmtree(tmp_dir, ignore_errors=True)
 
         def on_done():
             if not ok:

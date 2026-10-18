@@ -1,5 +1,4 @@
 import os
-import subprocess
 import tempfile
 import threading
 
@@ -13,6 +12,7 @@ from gi.repository import Gtk, Adw, GLib, GdkPixbuf
 from domain.entity.user_settings_entity import UserSettingsEntity
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.local_apps_repository import LocalAppsRepository
+from infrastructure.service.forge_install_service import install_bundle
 from infrastructure.service.install_queue_service import InstallQueueService
 from infrastructure.ui.shared.icons_shared import IconsShared
 
@@ -187,7 +187,46 @@ class FlatpakFilePage(Adw.NavigationPage):
     def _on_install_clicked(self, _btn):
         self._install_btn.set_sensitive(False)
         self._install_btn.set_label(_("Please wait…"))
+        scope_flag = "--user" if self._user_scope_row.get_active() else "--system"
 
+        def check_conflict():
+            conflict = FlatpakApi().get_bundle_conflict(self._file_path, scope_flag)
+            GLib.idle_add(self._on_conflict_checked, conflict)
+
+        threading.Thread(target=check_conflict, daemon=True).start()
+
+    def _on_conflict_checked(self, conflict):
+        if not conflict:
+            self._start_install()
+            return GLib.SOURCE_REMOVE
+
+        _ref, origin = conflict
+        dialog = Adw.AlertDialog(
+            heading=_("Replace the installed version?"),
+            body=_(
+                "This app is already installed from “{origin}”. It will be "
+                "uninstalled first (your data is kept), then replaced by this "
+                "file. If the install fails, the previous version is restored."
+            ).format(origin=origin),
+        )
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("replace", _("Replace"))
+        dialog.set_response_appearance("replace", Adw.ResponseAppearance.DESTRUCTIVE)
+        dialog.set_default_response("cancel")
+        dialog.set_close_response("cancel")
+
+        def on_response(_dialog, response):
+            if response == "replace":
+                self._start_install()
+            else:
+                self._install_btn.set_sensitive(True)
+                self._install_btn.set_label(_("Install"))
+
+        dialog.connect("response", on_response)
+        dialog.present(self)
+        return GLib.SOURCE_REMOVE
+
+    def _start_install(self):
         app_id = self._info.get("name", os.path.basename(self._file_path))
         app_name = self._derive_display_name(app_id)
         user_scope = self._user_scope_row.get_active()
@@ -196,20 +235,14 @@ class FlatpakFilePage(Adw.NavigationPage):
         queue_item = InstallQueueService().enqueue(app_id, app_name, "user" if user_scope else "system")
         GLib.idle_add(self._navigate_home_fn)
 
-        def _stream(cmd):
-            process = subprocess.Popen(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                text=True,
-            )
-            for line in process.stdout:
-                GLib.idle_add(queue_item.append_output, line)
-            process.wait()
-
         def run_install():
             flatpak_api = FlatpakApi()
-            _stream(flatpak_api.get_install_bundle_call(self._file_path, *flags))
+            install_bundle(
+                self._file_path,
+                flags[0],
+                lambda line: GLib.idle_add(queue_item.append_output, line),
+                flatpak_api,
+            )
             result = flatpak_api.get_info_by_id(app_id)
             final_status = "done" if result.returncode == 0 else "failed"
             if final_status == "done":

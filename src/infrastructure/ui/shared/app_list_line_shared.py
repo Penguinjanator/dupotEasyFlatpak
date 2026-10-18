@@ -180,10 +180,9 @@ def _make_list_card(
                         GLib.idle_add(queue_item.append_output, line)
                     process.wait()
                     for perm, value in active_permission_list:
-                        if perm.is_filesystem():
-                            subprocess.run(
-                                flatpak_api.get_override_filesystem_call(app.id, value)
-                            )
+                        override_call = flatpak_api.get_recipe_override_call(app.id, perm, value)
+                        if override_call:
+                            subprocess.run(override_call)
                     result = flatpak_api.get_info_by_id(app.id)
                     GLib.idle_add(
                         queue_item.set_status,

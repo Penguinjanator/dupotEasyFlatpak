@@ -118,6 +118,17 @@
   <releases>
 
 
+    <release date="2026-10-18" version="4.8.0">
+      <description>
+        <ul>
+          <li>Add new recipe for openRGB</li>
+          <li>Improve feature to install flatpak from github,gitlab, or codeberg</li>
+          <li>Improve recipe feature to allow override sound and install repo flatpak</li>
+        </ul>
+      </description>
+    </release>
+
+
     <release date="2026-10-15" version="4.7.4">
       <description>
         <ul>

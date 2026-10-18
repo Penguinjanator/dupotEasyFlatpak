@@ -50,10 +50,16 @@ class FlatpakApi(FlatpakApiContract):
         return prefix + ["env", "-u", "SHELL", "pkexec", "flatpak"] + list(args)
 
     def get_installed_app_id_list(self) -> list[str]:
+        return self._get_installed_id_list("--app")
+
+    def get_installed_runtime_id_list(self) -> list[str]:
+        return self._get_installed_id_list("--runtime")
+
+    def _get_installed_id_list(self, kind_flag: str) -> list[str]:
         seen = set()
         for scope in ("--user", "--system"):
             result = subprocess.run(
-                self._cmd("list", "--app", scope, "--columns=application"),
+                self._cmd("list", kind_flag, scope, "--columns=application"),
                 capture_output=True,
                 text=True,
             )
@@ -188,14 +194,58 @@ class FlatpakApi(FlatpakApiContract):
         return self._cmd("override", "--user", app_id, f"--filesystem={filesystem}")
 
     def get_override_filesystems(self, app_id: str) -> list[str]:
+        return self._get_override_values(app_id, "filesystems")
+
+    def get_override_socket_call(self, app_id: str, socket: str, enable: bool = True) -> list:
+        flag = "--socket" if enable else "--nosocket"
+        return self._cmd("override", "--user", app_id, f"{flag}={socket}")
+
+    def get_override_sockets(self, app_id: str) -> list[str]:
+        return self._get_override_values(app_id, "sockets")
+
+    def get_recipe_override_call(self, app_id: str, perm, value) -> list | None:
+        """`flatpak override` command for a recipe permission, or None when
+        the permission isn't an override (e.g. install_flatpak_yesno).
+        For sound, `value` is False to revoke; anything else grants."""
+        if perm.is_filesystem():
+            return self.get_override_filesystem_call(app_id, value)
+        if perm.is_sound():
+            socket = perm.get_value()
+            if value is False and socket in self.get_metadata_sockets(app_id):
+                # `flatpak override` can't drop a single key, and --nosocket
+                # would deny a socket the app itself ships with. Our grant
+                # is then redundant with the manifest: leave it.
+                return []
+            return self.get_override_socket_call(app_id, socket, value is not False)
+        return None
+
+    def get_metadata_sockets(self, app_id: str) -> list[str]:
+        """Sockets granted by the app's own manifest (overrides excluded)."""
+        result = subprocess.run(
+            self._cmd("info", "--show-metadata", app_id),
+            capture_output=True,
+            text=True,
+        )
+        in_context = False
+        for line in result.stdout.splitlines():
+            line = line.strip()
+            if line.startswith("["):
+                in_context = line == "[Context]"
+            elif in_context and line.startswith("sockets="):
+                raw = line[len("sockets=") :]
+                return [v for v in raw.split(";") if v.strip()]
+        return []
+
+    def _get_override_values(self, app_id: str, key: str) -> list[str]:
         result = subprocess.run(
             self._cmd("override", "--user", "--show", app_id),
             capture_output=True,
             text=True,
         )
+        prefix = f"{key}="
         for line in result.stdout.splitlines():
-            if line.startswith("filesystems="):
-                raw = line[len("filesystems=") :].rstrip(";")
+            if line.startswith(prefix):
+                raw = line[len(prefix) :].rstrip(";")
                 return [v for v in raw.split(";") if v.strip()]
         return []
 
@@ -360,9 +410,8 @@ class FlatpakApi(FlatpakApiContract):
         try:
             from gi.repository import GLib
 
-            with open(file_path, "rb") as f:
-                data = f.read()
-            gbytes = GLib.Bytes.new(data)
+            # Mapped, not read: bundles are often hundreds of MB.
+            gbytes = GLib.MappedFile.new(file_path, False).get_bytes()
             variant = GLib.Variant.new_from_bytes(
                 GLib.VariantType.new("(a{sv}aya{sv})"),
                 gbytes,
@@ -381,10 +430,47 @@ class FlatpakApi(FlatpakApiContract):
         except Exception:
             pass
 
+        # Bundles carry no "name" key — the real id is in the ref
+        # ("app/<id>/<arch>/<branch>" or "runtime/<id>/<arch>/<branch>").
+        ref_parts = info.get("ref", "").split("/")
+        if len(ref_parts) == 4:
+            info["name"] = ref_parts[1]
+
         return info
 
     def get_install_bundle_call(self, file_path: str, *flags) -> list:
         return self._cmd("install", "--bundle", *flags, file_path, "-y")
+
+    def get_installed_origin(self, ref: str, scope_flag: str) -> str | None:
+        result = subprocess.run(
+            self._cmd("info", scope_flag, "--show-origin", ref),
+            capture_output=True,
+            text=True,
+        )
+        origin = result.stdout.strip()
+        return origin if result.returncode == 0 and origin else None
+
+    def get_bundle_conflict(self, file_path: str, scope_flag: str) -> tuple | None:
+        """When the bundle's ref is already installed from a regular remote
+        (e.g. Flathub), flatpak reuses that GPG-verified origin for the
+        bundle and fails with "GPG verification enabled, but no signatures
+        found" — it must be uninstalled first (app data is kept).
+        Returns (ref, origin), or None when there's no such conflict. Refs
+        installed from a previous bundle live in an unsigned
+        "<name>-origin" remote and update fine in place."""
+        ref = self.get_flatpak_bundle_info(file_path).get("ref")
+        if not ref:
+            return None
+        origin = self.get_installed_origin(ref, scope_flag)
+        if not origin or origin.endswith("-origin"):
+            return None
+        return ref, origin
+
+    def get_uninstall_ref_call(self, ref: str, scope_flag: str) -> list:
+        return self._cmd("uninstall", scope_flag, "--noninteractive", "-y", ref)
+
+    def get_install_ref_call(self, origin: str, ref: str, scope_flag: str) -> list:
+        return self._cmd("install", scope_flag, "--noninteractive", "-y", origin, ref)
 
     def get_history_list_by_id(self, app_id: str) -> list[FlatpakHistoryEntity]:
         if app_id in self._history_cache_by_id_list:

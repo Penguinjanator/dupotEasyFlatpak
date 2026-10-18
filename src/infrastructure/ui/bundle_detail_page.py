@@ -20,6 +20,7 @@ from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.recipe_repository import RecipeRepository
 from infrastructure.repository.flatpakrepo_repository import FlatpakRepoRepository
+from infrastructure.service.forge_install_service import install_latest_forge_flatpak
 
 
 class BundleDetailPage(Adw.NavigationPage):
@@ -247,7 +248,14 @@ class BundleDetailPage(Adw.NavigationPage):
                 perm_group.add(row)
                 permission_rows.append((row, perm))
 
-            elif perm.is_install_flatpak_yes_no():
+            elif perm.is_sound():
+                row = Adw.SwitchRow()
+                row.set_title(_(perm.get_label()))
+                row.set_active(perm.get_label() in stored if stored else True)
+                perm_group.add(row)
+                permission_rows.append((row, perm))
+
+            elif perm.is_install_yes_no():
                 row = Adw.SwitchRow()
                 row.set_title(_(perm.get_label()))
                 row.set_active(perm.get_label() in stored if stored else True)
@@ -293,7 +301,10 @@ class BundleDetailPage(Adw.NavigationPage):
                     value = row.get_text().strip()
                     if value:
                         active_list.append((perm, value))
-                elif perm.is_install_flatpak_yes_no():
+                elif perm.is_sound():
+                    if row.get_active():
+                        active_list.append((perm, True))
+                elif perm.is_install_yes_no():
                     if row.get_active():
                         active_list.append((perm, None))
             self._app_permissions[app_id] = active_list
@@ -357,15 +368,24 @@ class BundleDetailPage(Adw.NavigationPage):
                 repo_scope_flag = FlatpakRepoRepository().get_scope_flag(
                     repo_id, fallback_scope_flag
                 )
+                dependencies_ok = True
                 _stream(flatpak_api.get_install_call(aid, repo_id, repo_scope_flag))
                 for perm, value in perms:
-                    if perm.is_filesystem():
-                        _stream(flatpak_api.get_override_filesystem_call(aid, value))
+                    override_call = flatpak_api.get_recipe_override_call(aid, perm, value)
+                    if override_call:
+                        _stream(override_call)
                     elif perm.is_install_flatpak_yes_no():
                         _stream(flatpak_api.get_install_call(perm.get_value(), "flathub", fallback_scope_flag))
+                    elif perm.is_install_forge_flatpak_yes_no():
+                        dependencies_ok &= install_latest_forge_flatpak(
+                            perm.get_value(),
+                            fallback_scope_flag,
+                            lambda line: GLib.idle_add(item.append_output, line),
+                        )
                 result = FlatpakApi().get_info_by_id(aid)
                 GLib.idle_add(
-                    item.set_status, "done" if result.returncode == 0 else "failed"
+                    item.set_status,
+                    "done" if result.returncode == 0 and dependencies_ok else "failed",
                 )
 
             threading.Thread(target=run_install, daemon=True).start()

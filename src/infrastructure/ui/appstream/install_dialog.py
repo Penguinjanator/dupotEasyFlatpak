@@ -26,6 +26,7 @@ class InstallDialog(Adw.AlertDialog):
         confirm_label: str = None,
         show_scope: bool = True,
         filesystem_override_values: list = None,
+        socket_override_values: list = None,  # current overridden sockets — set when editing overrides of an installed app
         locked_scope: str = None,  # "--user"/"--system" when the app's repo pins it, else None
         repo_id_list: list = None,  # flatpak remote ids this app is available from — the literal ids flatpak uses, e.g. "flathub"
     ):
@@ -114,7 +115,22 @@ class InstallDialog(Adw.AlertDialog):
                         _fs_index += 1
                         perm_group.add(path_row)
                         self._permission_rows.append((row, perm))
-                    elif perm.is_install_flatpak_yes_no():
+                    elif perm.is_sound():
+                        row = Adw.SwitchRow()
+                        row.set_title(_(perm.get_label()))
+                        if socket_override_values is None:
+                            initially_active = True
+                        else:
+                            initially_active = perm.get_value() in socket_override_values
+                        row.set_active(initially_active)
+                        # Only revoke (--nosocket) a sound override we granted
+                        # earlier — never deny a socket the app ships with.
+                        row._initially_overridden = (
+                            socket_override_values is not None and initially_active
+                        )
+                        perm_group.add(row)
+                        self._permission_rows.append((row, perm))
+                    elif perm.is_install_yes_no():
                         row = Adw.SwitchRow()
                         row.set_title(_(perm.get_label()))
                         row.set_active(True)
@@ -178,7 +194,12 @@ class InstallDialog(Adw.AlertDialog):
                 value = row.get_text().strip()
                 if value:
                     active_permission_list.append((perm, value))
-            elif perm.is_install_flatpak_yes_no():
+            elif perm.is_sound():
+                if row.get_active():
+                    active_permission_list.append((perm, True))
+                elif row._initially_overridden:
+                    active_permission_list.append((perm, False))
+            elif perm.is_install_yes_no():
                 if row.get_active():
                     active_permission_list.append((perm, None))
         self._on_confirm(user_scope, active_permission_list, self._get_selected_repo_id())
