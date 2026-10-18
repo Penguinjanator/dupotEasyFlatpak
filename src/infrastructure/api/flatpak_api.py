@@ -52,8 +52,31 @@ class FlatpakApi(FlatpakApiContract):
     def get_installed_app_id_list(self) -> list[str]:
         return self._get_installed_id_list("--app")
 
-    def get_installed_runtime_id_list(self) -> list[str]:
-        return self._get_installed_id_list("--runtime")
+    def get_installed_runtime_list(self) -> list[dict]:
+        """Installed runtimes (both scopes), deduped by id:
+        [{"id", "name", "version", "origin"}]."""
+        runtimes = {}
+        for scope in ("--user", "--system"):
+            result = subprocess.run(
+                self._cmd(
+                    "list", "--runtime", scope,
+                    "--columns=application,name,version,origin",
+                ),
+                capture_output=True,
+                text=True,
+            )
+            for line in result.stdout.splitlines():
+                cols = line.split("\t")
+                if not cols[0].strip():
+                    continue
+                cols += [""] * (4 - len(cols))
+                runtimes.setdefault(cols[0].strip(), {
+                    "id": cols[0].strip(),
+                    "name": cols[1].strip(),
+                    "version": cols[2].strip(),
+                    "origin": cols[3].strip(),
+                })
+        return list(runtimes.values())
 
     def _get_installed_id_list(self, kind_flag: str) -> list[str]:
         seen = set()

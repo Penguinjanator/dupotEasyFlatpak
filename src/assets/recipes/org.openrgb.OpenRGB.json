@@ -5,8 +5,8 @@
     "flatpakPermissionToOverrideList": [
         {
             "label": "recipe_should_install_openrgb_effects_plugin",
-            "type": "install_forge_flatpak_yesno",
-            "value": "https://codeberg.org/OpenRGB/OpenRGBEffectsPlugin"
+            "type": "install_flatpak_yesno",
+            "value": "org.openrgb.OpenRGB.Plugin.Effects"
         },
         {
             "label": "recipe_allow_sound_label",

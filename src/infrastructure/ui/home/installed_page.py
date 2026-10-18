@@ -8,6 +8,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk, Adw, GLib, Gio
 
 from domain.entity.appstream_short_entity import AppstreamShortEntity
+from domain.entity.local_app_entity import LocalAppEntity
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.local_apps_repository import LocalAppsRepository
@@ -142,15 +143,22 @@ class InstalledPage(Gtk.Box):
 
     def _load(self):
         ids = self._flatpak_api.get_installed_app_id_list()
-        # Runtimes (e.g. app plugins/extensions) are only listed when we
-        # installed them ourselves from a forge release or a .flatpak file.
+        # Runtimes are only listed when they're an installed app's extension
+        # (plugins named "<app_id>.<…>", e.g. org.openrgb.OpenRGB.Plugin.Effects)
+        # or when we installed them ourselves from a forge release or a
+        # .flatpak file — never the platforms/SDKs/GL drivers.
         local_ids = {local_app.id.lower() for local_app in LocalAppsRepository().get_list()}
-        self._runtime_ids = {
-            runtime_id
-            for runtime_id in self._flatpak_api.get_installed_runtime_id_list()
-            if runtime_id.lower() in local_ids
+        app_prefixes = tuple(f"{app_id}." for app_id in ids)
+        self._runtime_info_by_id = {
+            runtime["id"]: runtime
+            for runtime in self._flatpak_api.get_installed_runtime_list()
+            if runtime["id"].lower() in local_ids
+            or (
+                runtime["id"].startswith(app_prefixes)
+                and not runtime["id"].endswith((".Locale", ".Debug", ".Sources"))
+            )
         }
-        ids += list(self._runtime_ids)
+        ids += list(self._runtime_info_by_id)
         GLib.idle_add(self._apply, ids)
 
     def _apply(self, ids: list):
@@ -187,6 +195,16 @@ class InstalledPage(Gtk.Box):
         for missing_id in missing_ids:
             local_app = local_apps_by_id.get(missing_id.lower())
             if not local_app:
+                runtime = self._runtime_info_by_id.get(missing_id)
+                if runtime:
+                    entity = AppstreamShortEntity(
+                        missing_id,
+                        runtime["name"] or missing_id,
+                        "",
+                        self._get_extension_summary(runtime),
+                    )
+                    entity.is_local_only = True
+                    result.append(entity)
                 continue
             summary = local_app.url or _("Installed from a local .flatpak file")
             if local_app.version:
@@ -195,6 +213,13 @@ class InstalledPage(Gtk.Box):
             entity.is_local_only = True
             result.append(entity)
         return result
+
+    @staticmethod
+    def _get_extension_summary(runtime: dict) -> str:
+        parts = [_("Extension"), runtime["origin"]]
+        if runtime["version"]:
+            parts.append(runtime["version"])
+        return " · ".join(p for p in parts if p)
 
     def _on_app_clicked(self, _button, app_id: str):
         from infrastructure.ui.appstream_page import AppstreamPage
@@ -207,7 +232,19 @@ class InstalledPage(Gtk.Box):
             self._push_fn(AppstreamPage(app))
             return
 
+        runtime = getattr(self, "_runtime_info_by_id", {}).get(app_id)
         local_app = LocalAppsRepository().get_by_id(app_id)
+        origin = None
+        if not local_app and runtime:
+            # Extension from a regular remote (e.g. Flathub) — not tracked
+            # by us, so show what flatpak itself reports.
+            local_app = LocalAppEntity({
+                LocalAppEntity.FIELD_ID: app_id,
+                LocalAppEntity.FIELD_NAME: runtime["name"] or app_id,
+                LocalAppEntity.FIELD_URL: "",
+                LocalAppEntity.FIELD_VERSION: runtime["version"],
+            })
+            origin = runtime["origin"]
         if local_app:
             self._push_fn(
                 LocalAppDetailPage(
@@ -215,6 +252,7 @@ class InstalledPage(Gtk.Box):
                     local_app,
                     self.refresh,
                     self._on_open_flatpak,
-                    is_runtime=app_id in getattr(self, "_runtime_ids", set()),
+                    is_runtime=runtime is not None,
+                    origin=origin,
                 )
             )

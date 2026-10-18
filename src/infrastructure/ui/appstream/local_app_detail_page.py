@@ -34,9 +34,11 @@ class LocalAppDetailPage(Adw.NavigationPage):
         on_uninstalled_fn=None,
         on_open_flatpak_fn=None,
         is_runtime: bool = False,  # extension/plugin — nothing to run
+        origin: str = None,  # flatpak remote, for apps not tracked by LocalAppsRepository
     ):
         super().__init__()
         self._is_runtime = is_runtime
+        self._origin = origin
         self._app_id = app_id
         self._local_app = local_app
         self._on_uninstalled_fn = on_uninstalled_fn
@@ -125,6 +127,8 @@ class LocalAppDetailPage(Adw.NavigationPage):
             link_btn.set_valign(Gtk.Align.CENTER)
             link_btn.set_child(IconsShared().get_icon_by_name(IconsShared.ICON_HOMEPAGE))
             source_row.add_suffix(link_btn)
+        elif self._origin:
+            source_row.set_subtitle(self._origin)
         else:
             # Origin unknown — most likely this app's tracked info was lost
             # (e.g. local app data was reset) while the flatpak itself

@@ -15,7 +15,7 @@ class FlatpakApiContract:
         pass
 
     @abstractmethod
-    def get_installed_runtime_id_list(self) -> list[str]:
+    def get_installed_runtime_list(self) -> list[dict]:
         pass
 
     @abstractmethod

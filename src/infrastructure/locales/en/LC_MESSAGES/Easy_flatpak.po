@@ -2,12 +2,12 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 22:00+0200\n"
+"POT-Creation-Date: 2026-10-18 22:42+0200\n"
 "Language: en\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/infrastructure/api/flatpak_api.py:349
+#: src/infrastructure/api/flatpak_api.py:372
 msgid "The repository did not respond in time"
 msgstr ""
 
@@ -28,8 +28,8 @@ msgstr "Select a version to downgrade to"
 #: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:56
 #: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:132
 #: src/infrastructure/ui/appstream/install_dialog.py:148
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:162
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:344
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:166
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:348
 #: src/infrastructure/ui/appstream_page.py:473
 #: src/infrastructure/ui/app_window.py:706
 #: src/infrastructure/ui/bundle_detail_page.py:287
@@ -47,7 +47,7 @@ msgstr "Install .flatpak"
 
 # --- App detail page ---
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:122
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:118
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:120
 #: src/infrastructure/ui/appstream_page.py:250
 msgid "Details"
 msgstr "Details"
@@ -85,7 +85,7 @@ msgstr "Install for current user only"
 #: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:133
 #: src/infrastructure/ui/appstream/install_dialog.py:34
 #: src/infrastructure/ui/appstream/install_dialog.py:149
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:281
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:285
 #: src/infrastructure/ui/appstream_page.py:434
 #: src/infrastructure/ui/menu/import_dialog.py:99
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:150
@@ -94,7 +94,7 @@ msgid "Install"
 msgstr "Install"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:189
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:354
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:358
 #: src/infrastructure/ui/appstream_page.py:485
 #: src/infrastructure/ui/appstream_page.py:515
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:89
@@ -151,7 +151,7 @@ msgid "Find latest release"
 msgstr ""
 
 #: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:73
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:175
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:179
 msgid "This doesn't look like a valid GitHub, GitLab or Codeberg project URL."
 msgstr ""
 
@@ -204,78 +204,78 @@ msgstr "Installing…"
 msgid "Close"
 msgstr "Close"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:121
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:123
 msgid "Source"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:133
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:137
 msgid "Unknown — no releases available"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:134
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:144
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:138
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:148
 msgid "Link to project"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:147
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:151
 msgid ""
 "Enter the URL of the GitHub, GitLab or Codeberg project this app was "
 "installed from."
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:163
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:167
 msgid "Link"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:197
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:201
 msgid "Releases"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:200
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:303
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:204
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:307
 msgid "Load more releases"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:207
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:219
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:211
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:223
 #: src/infrastructure/ui/app_window.py:90
 #: src/infrastructure/ui/shared/installed_list_shared.py:189
 msgid "Loading…"
 msgstr "Loading…"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:241
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:245
 msgid "No release with a .flatpak asset found"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:252
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:256
 msgid "No description"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:259
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:263
 #: src/infrastructure/ui/app_window.py:272
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:129
 #: src/infrastructure/ui/shared/app_list_line_shared.py:129
 msgid "Installed"
 msgstr "Installed"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:267
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:271
 msgid "No release notes."
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:281
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:285
 msgid "Reinstall"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:313
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:317
 #: src/infrastructure/ui/appstream_page.py:180
 #: src/infrastructure/ui/shared/installed_list_shared.py:123
 msgid "Run"
 msgstr "Run"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:319
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:342
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:345
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:367
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:323
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:346
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:349
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:371
 #: src/infrastructure/ui/appstream_page.py:423
 #: src/infrastructure/ui/appstream_page.py:471
 #: src/infrastructure/ui/appstream_page.py:474
@@ -286,7 +286,7 @@ msgstr "Run"
 msgid "Uninstall"
 msgstr "Uninstall"
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:335
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:339
 #: src/infrastructure/ui/appstream_page.py:464
 #: src/infrastructure/ui/shared/installed_list_shared.py:141
 msgid "Delete application data"
@@ -370,24 +370,24 @@ msgstr "Parameters"
 
 #: src/infrastructure/ui/app_window.py:180
 #: src/infrastructure/ui/app_window.py:533
-#: src/infrastructure/ui/home/installed_page.py:75
-#: src/infrastructure/ui/home/installed_page.py:78
+#: src/infrastructure/ui/home/installed_page.py:76
+#: src/infrastructure/ui/home/installed_page.py:79
 #: src/infrastructure/ui/menu/import_dialog.py:17
 msgid "Import"
 msgstr "Import"
 
 #: src/infrastructure/ui/app_window.py:181
 #: src/infrastructure/ui/app_window.py:630
-#: src/infrastructure/ui/home/installed_page.py:85
-#: src/infrastructure/ui/home/installed_page.py:88
+#: src/infrastructure/ui/home/installed_page.py:86
+#: src/infrastructure/ui/home/installed_page.py:89
 msgid "Export"
 msgstr "Export"
 
 #: src/infrastructure/ui/app_window.py:182
 #: src/infrastructure/ui/app_window.py:515
-#: src/infrastructure/ui/home/installed_page.py:95
-#: src/infrastructure/ui/home/installed_page.py:98
-#: src/infrastructure/ui/home/installed_page.py:121
+#: src/infrastructure/ui/home/installed_page.py:96
+#: src/infrastructure/ui/home/installed_page.py:99
+#: src/infrastructure/ui/home/installed_page.py:122
 msgid "Install local Flatpak"
 msgstr "Install local Flatpak"
 
@@ -443,7 +443,7 @@ msgid "Popular"
 msgstr "Popular"
 
 #: src/infrastructure/ui/app_window.py:517
-#: src/infrastructure/ui/home/installed_page.py:123
+#: src/infrastructure/ui/home/installed_page.py:124
 msgid "Flatpak files"
 msgstr "Flatpak files"
 
@@ -505,21 +505,25 @@ msgstr "Done"
 msgid "Search…"
 msgstr "Search…"
 
-#: src/infrastructure/ui/home/installed_page.py:49
+#: src/infrastructure/ui/home/installed_page.py:50
 msgid "No installed applications found"
 msgstr "No installed applications found"
 
-#: src/infrastructure/ui/home/installed_page.py:104
+#: src/infrastructure/ui/home/installed_page.py:105
 msgid "Install from release"
 msgstr ""
 
-#: src/infrastructure/ui/home/installed_page.py:108
+#: src/infrastructure/ui/home/installed_page.py:109
 msgid "Install a Flatpak from a GitHub, GitLab or Codeberg release"
 msgstr ""
 
-#: src/infrastructure/ui/home/installed_page.py:191
+#: src/infrastructure/ui/home/installed_page.py:209
 msgid "Installed from a local .flatpak file"
 msgstr ""
+
+#: src/infrastructure/ui/home/installed_page.py:219
+msgid "Extension"
+msgstr "Extension"
 
 #: src/infrastructure/ui/home/pending_list_page.py:84
 #: src/infrastructure/ui/home/pending_list_page.py:125
