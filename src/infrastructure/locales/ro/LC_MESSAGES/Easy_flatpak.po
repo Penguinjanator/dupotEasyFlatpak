@@ -2,20 +2,20 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 22:42+0200\n"
+"POT-Creation-Date: 2026-10-21 22:43+0200\n"
 "Language: ro\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/infrastructure/api/flatpak_api.py:372
+#: src/infrastructure/api/flatpak_api.py:451
 msgid "The repository did not respond in time"
 msgstr "Depozitul nu a răspuns la timp"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:15
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:51
-#: src/infrastructure/ui/appstream_page.py:175
-#: src/infrastructure/ui/shared/installed_list_shared.py:185
-#: src/infrastructure/ui/shared/installed_list_shared.py:199
+#: src/infrastructure/ui/appstream_page.py:178
+#: src/infrastructure/ui/shared/installed_list_shared.py:177
+#: src/infrastructure/ui/shared/installed_list_shared.py:191
 msgid "Downgrade"
 msgstr "Retrogradează"
 
@@ -27,17 +27,17 @@ msgstr "Selectați o versiune la care să reveniți"
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:212
 #: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:56
 #: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:132
-#: src/infrastructure/ui/appstream/install_dialog.py:148
+#: src/infrastructure/ui/appstream/install_dialog.py:177
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:166
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:348
-#: src/infrastructure/ui/appstream_page.py:473
+#: src/infrastructure/ui/appstream_page.py:476
 #: src/infrastructure/ui/app_window.py:706
 #: src/infrastructure/ui/bundle_detail_page.py:287
 #: src/infrastructure/ui/home/updates_page.py:183
 #: src/infrastructure/ui/home/updates_page.py:231
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:213
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:254
-#: src/infrastructure/ui/shared/installed_list_shared.py:150
+#: src/infrastructure/ui/shared/installed_list_shared.py:142
 msgid "Cancel"
 msgstr "Anulează"
 
@@ -48,7 +48,7 @@ msgstr "Instalează .flatpak"
 # --- App detail page ---
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:122
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:120
-#: src/infrastructure/ui/appstream_page.py:250
+#: src/infrastructure/ui/appstream_page.py:253
 msgid "Details"
 msgstr "Detalii"
 
@@ -74,7 +74,7 @@ msgid "Installation"
 msgstr "Instalare"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:159
-#: src/infrastructure/ui/appstream/install_dialog.py:75
+#: src/infrastructure/ui/appstream/install_dialog.py:74
 #: src/infrastructure/ui/bundle_detail_page.py:73
 msgid "Install for current user only"
 msgstr "Instalează doar pentru utilizatorul curent"
@@ -83,24 +83,24 @@ msgstr "Instalează doar pentru utilizatorul curent"
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:168
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:223
 #: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:133
-#: src/infrastructure/ui/appstream/install_dialog.py:34
-#: src/infrastructure/ui/appstream/install_dialog.py:149
+#: src/infrastructure/ui/appstream/install_dialog.py:33
+#: src/infrastructure/ui/appstream/install_dialog.py:178
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:285
-#: src/infrastructure/ui/appstream_page.py:434
+#: src/infrastructure/ui/appstream_page.py:437
 #: src/infrastructure/ui/menu/import_dialog.py:99
-#: src/infrastructure/ui/shared/app_list_grid_shared.py:150
-#: src/infrastructure/ui/shared/app_list_line_shared.py:150
+#: src/infrastructure/ui/shared/app_list_grid_shared.py:151
+#: src/infrastructure/ui/shared/app_list_line_shared.py:151
 msgid "Install"
 msgstr "Instalează"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:189
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:358
-#: src/infrastructure/ui/appstream_page.py:485
-#: src/infrastructure/ui/appstream_page.py:515
+#: src/infrastructure/ui/appstream_page.py:488
+#: src/infrastructure/ui/appstream_page.py:518
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:89
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:225
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:273
-#: src/infrastructure/ui/shared/installed_list_shared.py:160
+#: src/infrastructure/ui/shared/installed_list_shared.py:152
 msgid "Please wait…"
 msgstr "Vă rugăm așteptați…"
 
@@ -183,20 +183,20 @@ msgstr "Versiune"
 msgid "Failed to download a valid .flatpak file from this release."
 msgstr "Nu s-a putut descărca un fișier .flatpak valid din această versiune."
 
-#: src/infrastructure/ui/appstream/install_dialog.py:59
+#: src/infrastructure/ui/appstream/install_dialog.py:58
 msgid "Repository"
 msgstr "Depozit"
 
-#: src/infrastructure/ui/appstream/install_dialog.py:60
+#: src/infrastructure/ui/appstream/install_dialog.py:59
 msgid "This app is available from several repositories"
 msgstr "Această aplicație este disponibilă în mai multe depozite"
 
-#: src/infrastructure/ui/appstream/install_dialog.py:93
+#: src/infrastructure/ui/appstream/install_dialog.py:101
 #: src/infrastructure/ui/bundle_detail_page.py:222
 msgid "Permissions"
 msgstr "Permisiuni"
 
-#: src/infrastructure/ui/appstream/install_dialog.py:170
+#: src/infrastructure/ui/appstream/install_dialog.py:199
 msgid "This repository only supports this scope"
 msgstr "Acest depozit acceptă doar acest domeniu"
 
@@ -247,7 +247,7 @@ msgstr "Încarcă mai multe versiuni"
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:211
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:223
 #: src/infrastructure/ui/app_window.py:90
-#: src/infrastructure/ui/shared/installed_list_shared.py:189
+#: src/infrastructure/ui/shared/installed_list_shared.py:181
 msgid "Loading…"
 msgstr "Se încarcă…"
 
@@ -261,8 +261,8 @@ msgstr "Fără descriere"
 
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:263
 #: src/infrastructure/ui/app_window.py:272
-#: src/infrastructure/ui/shared/app_list_grid_shared.py:129
-#: src/infrastructure/ui/shared/app_list_line_shared.py:129
+#: src/infrastructure/ui/shared/app_list_grid_shared.py:130
+#: src/infrastructure/ui/shared/app_list_line_shared.py:130
 msgid "Installed"
 msgstr "Instalat"
 
@@ -275,8 +275,8 @@ msgid "Reinstall"
 msgstr "Reinstalează"
 
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:317
-#: src/infrastructure/ui/appstream_page.py:180
-#: src/infrastructure/ui/shared/installed_list_shared.py:123
+#: src/infrastructure/ui/appstream_page.py:183
+#: src/infrastructure/ui/shared/installed_list_shared.py:115
 msgid "Run"
 msgstr "Rulează"
 
@@ -284,81 +284,81 @@ msgstr "Rulează"
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:346
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:349
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:371
-#: src/infrastructure/ui/appstream_page.py:423
-#: src/infrastructure/ui/appstream_page.py:471
+#: src/infrastructure/ui/appstream_page.py:426
 #: src/infrastructure/ui/appstream_page.py:474
-#: src/infrastructure/ui/shared/installed_list_shared.py:129
-#: src/infrastructure/ui/shared/installed_list_shared.py:148
-#: src/infrastructure/ui/shared/installed_list_shared.py:151
-#: src/infrastructure/ui/shared/installed_list_shared.py:172
+#: src/infrastructure/ui/appstream_page.py:477
+#: src/infrastructure/ui/shared/installed_list_shared.py:121
+#: src/infrastructure/ui/shared/installed_list_shared.py:140
+#: src/infrastructure/ui/shared/installed_list_shared.py:143
+#: src/infrastructure/ui/shared/installed_list_shared.py:164
 msgid "Uninstall"
 msgstr "Dezinstalează"
 
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:339
-#: src/infrastructure/ui/appstream_page.py:464
-#: src/infrastructure/ui/shared/installed_list_shared.py:141
+#: src/infrastructure/ui/appstream_page.py:467
+#: src/infrastructure/ui/shared/installed_list_shared.py:133
 msgid "Delete application data"
 msgstr "Șterge datele aplicației"
 
-#: src/infrastructure/ui/appstream_page.py:170
-#: src/infrastructure/ui/appstream_page.py:659
-#: src/infrastructure/ui/shared/installed_list_shared.py:111
+#: src/infrastructure/ui/appstream_page.py:173
+#: src/infrastructure/ui/appstream_page.py:648
+#: src/infrastructure/ui/shared/installed_list_shared.py:104
 msgid "Recipe overrides"
 msgstr "Substituiri rețetă"
 
-#: src/infrastructure/ui/appstream_page.py:189
-#: src/infrastructure/ui/shared/installed_list_shared.py:81
+#: src/infrastructure/ui/appstream_page.py:192
+#: src/infrastructure/ui/shared/installed_list_shared.py:82
 msgid "Pinned to a specific version"
 msgstr "Fixat la o versiune specifică"
 
-#: src/infrastructure/ui/appstream_page.py:254
+#: src/infrastructure/ui/appstream_page.py:257
 msgid "License"
 msgstr "Licență"
 
-#: src/infrastructure/ui/appstream_page.py:260
+#: src/infrastructure/ui/appstream_page.py:263
 msgid "Download Size"
 msgstr "Dimensiune descărcare"
 
-#: src/infrastructure/ui/appstream_page.py:266
+#: src/infrastructure/ui/appstream_page.py:269
 msgid "Installed Size"
 msgstr "Dimensiune instalată"
 
-#: src/infrastructure/ui/appstream_page.py:272
+#: src/infrastructure/ui/appstream_page.py:275
 msgid "Architectures"
 msgstr "Arhitecturi"
 
-#: src/infrastructure/ui/appstream_page.py:279
+#: src/infrastructure/ui/appstream_page.py:282
 msgid "Homepage"
 msgstr "Pagina principală"
 
-#: src/infrastructure/ui/appstream_page.py:293
+#: src/infrastructure/ui/appstream_page.py:296
 msgid "Bug Tracker"
 msgstr "Urmărire erori"
 
-#: src/infrastructure/ui/appstream_page.py:307
+#: src/infrastructure/ui/appstream_page.py:310
 msgid "Donate"
 msgstr "Donează"
 
-#: src/infrastructure/ui/appstream_page.py:322
+#: src/infrastructure/ui/appstream_page.py:325
 msgid "Description"
 msgstr "Descriere"
 
-#: src/infrastructure/ui/appstream_page.py:432
-#: src/infrastructure/ui/shared/app_list_grid_shared.py:150
-#: src/infrastructure/ui/shared/app_list_line_shared.py:150
+#: src/infrastructure/ui/appstream_page.py:435
+#: src/infrastructure/ui/shared/app_list_grid_shared.py:151
+#: src/infrastructure/ui/shared/app_list_line_shared.py:151
 msgid "Install with recipe"
 msgstr "Instalează cu rețetă"
 
-#: src/infrastructure/ui/appstream_page.py:660
-#: src/infrastructure/ui/shared/installed_list_shared.py:112
+#: src/infrastructure/ui/appstream_page.py:649
+#: src/infrastructure/ui/shared/installed_list_shared.py:105
 msgid "Apply"
 msgstr "Aplică"
 
-#: src/infrastructure/ui/appstream_page.py:679
+#: src/infrastructure/ui/appstream_page.py:667
 msgid "Screenshots"
 msgstr "Capturi de ecran"
 
-#: src/infrastructure/ui/appstream_page.py:879
+#: src/infrastructure/ui/appstream_page.py:867
 msgid "Release History"
 msgstr "Istoricul versiunilor"
 
@@ -496,7 +496,7 @@ msgid "Edit permissions"
 msgstr "Editează permisiunile"
 
 #: src/infrastructure/ui/bundle_detail_page.py:182
-#: src/infrastructure/ui/bundle_detail_page.py:267
+#: src/infrastructure/ui/bundle_detail_page.py:269
 #: src/infrastructure/ui/menu/import_dialog.py:120
 #: src/infrastructure/ui/menu/import_dialog.py:126
 msgid "Already installed"
@@ -913,6 +913,81 @@ msgstr "Permite sunetul (PulseAudio)"
 
 msgid "recipe_should_install_openrgb_effects_plugin"
 msgstr "Instalează pluginul OpenRGB Effects"
+
+msgid "recipe_should_install_gamescope"
+msgstr "Instalează Gamescope (micro-compozitor pentru jocuri)"
+
+msgid "recipe_should_install_obs_vkcapture_layer"
+msgstr "Instalează stratul de captură jocuri pentru OBS (OBS VkCapture)"
+
+msgid "recipe_enable_obs_vkcapture"
+msgstr "Activează captura de jocuri OBS pentru toate jocurile"
+
+msgid "recipe_should_install_proton_ge"
+msgstr "Instalează Proton-GE (compatibilitate mai bună a jocurilor)"
+
+msgid "recipe_should_install_protonup"
+msgstr "Instalează ProtonUp-Qt pentru a gestiona versiunile Proton/Wine"
+
+msgid "recipe_indicate_your_recording_path_label"
+msgstr "Indicați calea directorului în care stocați înregistrările"
+
+msgid "recipe_should_install_obs_plugin_vkcapture"
+msgstr "Instalează pluginul de captură jocuri (Vulkan/OpenGL)"
+
+msgid "recipe_should_install_obs_plugin_pipewire_audio"
+msgstr "Instalează pluginul de captură audio per aplicație (PipeWire)"
+
+msgid "recipe_should_install_obs_plugin_gstreamer_vaapi"
+msgstr "Instalează pluginul de codare hardware (GStreamer VA-API)"
+
+msgid "recipe_should_install_obs_plugin_background_removal"
+msgstr "Instalează pluginul de eliminare a fundalului"
+
+msgid "recipe_should_install_obs_plugin_move_transition"
+msgstr "Instalează pluginul de tranziție Move"
+
+msgid "recipe_should_install_obs_plugin_scene_switcher"
+msgstr "Instalează pluginul Advanced Scene Switcher"
+
+msgid "recipe_should_install_obs_plugin_wayland_hotkeys"
+msgstr "Instalează pluginul de scurtături globale pentru Wayland"
+
+msgid "recipe_should_install_gimp_plugin_gmic"
+msgstr "Instalează pluginul de filtre G'MIC"
+
+msgid "recipe_should_install_gimp_plugin_resynthesizer"
+msgstr "Instalează pluginul Resynthesizer (umplere inteligentă)"
+
+msgid "recipe_should_install_gimp_plugin_fourier"
+msgstr "Instalează pluginul de transformată Fourier"
+
+msgid "recipe_should_install_lsp_plugins"
+msgstr "Instalează pluginurile audio LSP"
+
+msgid "recipe_should_install_calf_plugins"
+msgstr "Instalează pluginurile audio Calf"
+
+msgid "recipe_should_install_x42_plugins"
+msgstr "Instalează pluginurile audio x42"
+
+msgid "recipe_indicate_your_projects_path_label"
+msgstr "Indicați calea directorului în care stocați proiectele"
+
+msgid "recipe_should_install_sdk_node"
+msgstr "Instalează Node.js (extensie SDK)"
+
+msgid "recipe_should_install_sdk_golang"
+msgstr "Instalează Go (extensie SDK)"
+
+msgid "recipe_should_install_sdk_rust"
+msgstr "Instalează Rust (extensie SDK)"
+
+msgid "recipe_should_install_sdk_openjdk"
+msgstr "Instalează OpenJDK 21 (extensie SDK)"
+
+msgid "recipe_enable_sdk_extensions"
+msgstr "Activează extensiile SDK instalate în editor"
 
 msgid "Gaming"
 msgstr "Jocuri"

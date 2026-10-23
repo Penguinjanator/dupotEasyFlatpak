@@ -16,6 +16,7 @@ from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.pinned_apps_repository import PinnedAppsRepository
 from infrastructure.repository.recipe_repository import RecipeRepository
 from infrastructure.service.install_queue_service import InstallQueueService
+from infrastructure.service.recipe_apply_service import apply_recipe_overrides_async
 from infrastructure.ui.appstream.downgrade_dialog import DowngradeDialog
 from infrastructure.ui.appstream.install_dialog import InstallDialog
 
@@ -90,18 +91,10 @@ def _make_installed_row(
 
         def on_recipe(_btn):
             recipe_uc = GetRecipeContentUc(RecipeRepository())
-            current_fs = FlatpakApi().get_override_filesystems(app.id)
-            current_sockets = FlatpakApi().get_override_sockets(app.id)
+            current_overrides = FlatpakApi().get_current_overrides(app.id)
 
             def on_confirm(_user_scope, active_permission_list, _repo_id):
-                def run_overrides():
-                    flatpak_api = FlatpakApi()
-                    for perm, value in active_permission_list:
-                        override_call = flatpak_api.get_recipe_override_call(app.id, perm, value)
-                        if override_call:
-                            subprocess.run(override_call)
-
-                threading.Thread(target=run_overrides, daemon=True).start()
+                apply_recipe_overrides_async(app.id, app.getName(), active_permission_list)
 
             dialog = InstallDialog(
                 app.id,
@@ -111,8 +104,7 @@ def _make_installed_row(
                 heading=_("Recipe overrides"),
                 confirm_label=_("Apply"),
                 show_scope=False,
-                filesystem_override_values=current_fs,
-                socket_override_values=current_sockets,
+                current_overrides=current_overrides,
             )
             dialog.present(row.get_root())
 

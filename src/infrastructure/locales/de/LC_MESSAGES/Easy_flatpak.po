@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 22:42+0200\n"
+"POT-Creation-Date: 2026-10-21 22:43+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -13,15 +13,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.9\n"
 
-#: src/infrastructure/api/flatpak_api.py:372
+#: src/infrastructure/api/flatpak_api.py:451
 msgid "The repository did not respond in time"
 msgstr "Das Repository hat nicht rechtzeitig geantwortet"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:15
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:51
-#: src/infrastructure/ui/appstream_page.py:175
-#: src/infrastructure/ui/shared/installed_list_shared.py:185
-#: src/infrastructure/ui/shared/installed_list_shared.py:199
+#: src/infrastructure/ui/appstream_page.py:178
+#: src/infrastructure/ui/shared/installed_list_shared.py:177
+#: src/infrastructure/ui/shared/installed_list_shared.py:191
 msgid "Downgrade"
 msgstr "Herabstufen"
 
@@ -33,17 +33,17 @@ msgstr "Wähle eine Version aus, auf die Du zurückstufen möchtest"
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:212
 #: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:56
 #: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:132
-#: src/infrastructure/ui/appstream/install_dialog.py:148
+#: src/infrastructure/ui/appstream/install_dialog.py:177
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:166
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:348
-#: src/infrastructure/ui/appstream_page.py:473
+#: src/infrastructure/ui/appstream_page.py:476
 #: src/infrastructure/ui/app_window.py:706
 #: src/infrastructure/ui/bundle_detail_page.py:287
 #: src/infrastructure/ui/home/updates_page.py:183
 #: src/infrastructure/ui/home/updates_page.py:231
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:213
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:254
-#: src/infrastructure/ui/shared/installed_list_shared.py:150
+#: src/infrastructure/ui/shared/installed_list_shared.py:142
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -54,7 +54,7 @@ msgstr ".flatpak installieren"
 # --- App detail page ---
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:122
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:120
-#: src/infrastructure/ui/appstream_page.py:250
+#: src/infrastructure/ui/appstream_page.py:253
 msgid "Details"
 msgstr "Hinweise"
 
@@ -80,7 +80,7 @@ msgid "Installation"
 msgstr "Installation"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:159
-#: src/infrastructure/ui/appstream/install_dialog.py:75
+#: src/infrastructure/ui/appstream/install_dialog.py:74
 #: src/infrastructure/ui/bundle_detail_page.py:73
 msgid "Install for current user only"
 msgstr "Nur für aktuellen Benutzer installieren"
@@ -89,24 +89,24 @@ msgstr "Nur für aktuellen Benutzer installieren"
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:168
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:223
 #: src/infrastructure/ui/appstream/forge_flatpak_dialog.py:133
-#: src/infrastructure/ui/appstream/install_dialog.py:34
-#: src/infrastructure/ui/appstream/install_dialog.py:149
+#: src/infrastructure/ui/appstream/install_dialog.py:33
+#: src/infrastructure/ui/appstream/install_dialog.py:178
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:285
-#: src/infrastructure/ui/appstream_page.py:434
+#: src/infrastructure/ui/appstream_page.py:437
 #: src/infrastructure/ui/menu/import_dialog.py:99
-#: src/infrastructure/ui/shared/app_list_grid_shared.py:150
-#: src/infrastructure/ui/shared/app_list_line_shared.py:150
+#: src/infrastructure/ui/shared/app_list_grid_shared.py:151
+#: src/infrastructure/ui/shared/app_list_line_shared.py:151
 msgid "Install"
 msgstr "Installieren"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:189
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:358
-#: src/infrastructure/ui/appstream_page.py:485
-#: src/infrastructure/ui/appstream_page.py:515
+#: src/infrastructure/ui/appstream_page.py:488
+#: src/infrastructure/ui/appstream_page.py:518
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:89
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:225
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:273
-#: src/infrastructure/ui/shared/installed_list_shared.py:160
+#: src/infrastructure/ui/shared/installed_list_shared.py:152
 msgid "Please wait…"
 msgstr "Bitte warten…"
 
@@ -193,20 +193,20 @@ msgstr ""
 "Aus diesem Release konnte keine gültige .flatpak-Datei heruntergeladen "
 "werden."
 
-#: src/infrastructure/ui/appstream/install_dialog.py:59
+#: src/infrastructure/ui/appstream/install_dialog.py:58
 msgid "Repository"
 msgstr "Repository"
 
-#: src/infrastructure/ui/appstream/install_dialog.py:60
+#: src/infrastructure/ui/appstream/install_dialog.py:59
 msgid "This app is available from several repositories"
 msgstr "Diese App ist in mehreren Repositorys verfügbar"
 
-#: src/infrastructure/ui/appstream/install_dialog.py:93
+#: src/infrastructure/ui/appstream/install_dialog.py:101
 #: src/infrastructure/ui/bundle_detail_page.py:222
 msgid "Permissions"
 msgstr "Berechtigungen"
 
-#: src/infrastructure/ui/appstream/install_dialog.py:170
+#: src/infrastructure/ui/appstream/install_dialog.py:199
 msgid "This repository only supports this scope"
 msgstr "Dieses Repository unterstützt nur diesen Bereich"
 
@@ -258,7 +258,7 @@ msgstr "Weitere Releases laden"
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:211
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:223
 #: src/infrastructure/ui/app_window.py:90
-#: src/infrastructure/ui/shared/installed_list_shared.py:189
+#: src/infrastructure/ui/shared/installed_list_shared.py:181
 msgid "Loading…"
 msgstr "Laden…"
 
@@ -272,8 +272,8 @@ msgstr "Keine Beschreibung"
 
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:263
 #: src/infrastructure/ui/app_window.py:272
-#: src/infrastructure/ui/shared/app_list_grid_shared.py:129
-#: src/infrastructure/ui/shared/app_list_line_shared.py:129
+#: src/infrastructure/ui/shared/app_list_grid_shared.py:130
+#: src/infrastructure/ui/shared/app_list_line_shared.py:130
 msgid "Installed"
 msgstr "Installiert"
 
@@ -286,8 +286,8 @@ msgid "Reinstall"
 msgstr "Neu installieren"
 
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:317
-#: src/infrastructure/ui/appstream_page.py:180
-#: src/infrastructure/ui/shared/installed_list_shared.py:123
+#: src/infrastructure/ui/appstream_page.py:183
+#: src/infrastructure/ui/shared/installed_list_shared.py:115
 msgid "Run"
 msgstr "Ausführen"
 
@@ -295,81 +295,81 @@ msgstr "Ausführen"
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:346
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:349
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:371
-#: src/infrastructure/ui/appstream_page.py:423
-#: src/infrastructure/ui/appstream_page.py:471
+#: src/infrastructure/ui/appstream_page.py:426
 #: src/infrastructure/ui/appstream_page.py:474
-#: src/infrastructure/ui/shared/installed_list_shared.py:129
-#: src/infrastructure/ui/shared/installed_list_shared.py:148
-#: src/infrastructure/ui/shared/installed_list_shared.py:151
-#: src/infrastructure/ui/shared/installed_list_shared.py:172
+#: src/infrastructure/ui/appstream_page.py:477
+#: src/infrastructure/ui/shared/installed_list_shared.py:121
+#: src/infrastructure/ui/shared/installed_list_shared.py:140
+#: src/infrastructure/ui/shared/installed_list_shared.py:143
+#: src/infrastructure/ui/shared/installed_list_shared.py:164
 msgid "Uninstall"
 msgstr "Deinstallieren"
 
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:339
-#: src/infrastructure/ui/appstream_page.py:464
-#: src/infrastructure/ui/shared/installed_list_shared.py:141
+#: src/infrastructure/ui/appstream_page.py:467
+#: src/infrastructure/ui/shared/installed_list_shared.py:133
 msgid "Delete application data"
 msgstr "Anwendungsdaten löschen"
 
-#: src/infrastructure/ui/appstream_page.py:170
-#: src/infrastructure/ui/appstream_page.py:659
-#: src/infrastructure/ui/shared/installed_list_shared.py:111
+#: src/infrastructure/ui/appstream_page.py:173
+#: src/infrastructure/ui/appstream_page.py:648
+#: src/infrastructure/ui/shared/installed_list_shared.py:104
 msgid "Recipe overrides"
 msgstr "Rezeptüberschreibungen"
 
-#: src/infrastructure/ui/appstream_page.py:189
-#: src/infrastructure/ui/shared/installed_list_shared.py:81
+#: src/infrastructure/ui/appstream_page.py:192
+#: src/infrastructure/ui/shared/installed_list_shared.py:82
 msgid "Pinned to a specific version"
 msgstr "An eine bestimmte Version gebunden"
 
-#: src/infrastructure/ui/appstream_page.py:254
+#: src/infrastructure/ui/appstream_page.py:257
 msgid "License"
 msgstr "Lizenz"
 
-#: src/infrastructure/ui/appstream_page.py:260
+#: src/infrastructure/ui/appstream_page.py:263
 msgid "Download Size"
 msgstr "Download Größe"
 
-#: src/infrastructure/ui/appstream_page.py:266
+#: src/infrastructure/ui/appstream_page.py:269
 msgid "Installed Size"
 msgstr "Installierte Größe"
 
-#: src/infrastructure/ui/appstream_page.py:272
+#: src/infrastructure/ui/appstream_page.py:275
 msgid "Architectures"
 msgstr "Architekturen"
 
-#: src/infrastructure/ui/appstream_page.py:279
+#: src/infrastructure/ui/appstream_page.py:282
 msgid "Homepage"
 msgstr "Homepage"
 
-#: src/infrastructure/ui/appstream_page.py:293
+#: src/infrastructure/ui/appstream_page.py:296
 msgid "Bug Tracker"
 msgstr "Fehlerverfolgung"
 
-#: src/infrastructure/ui/appstream_page.py:307
+#: src/infrastructure/ui/appstream_page.py:310
 msgid "Donate"
 msgstr "Spenden"
 
-#: src/infrastructure/ui/appstream_page.py:322
+#: src/infrastructure/ui/appstream_page.py:325
 msgid "Description"
 msgstr "Beschreibung"
 
-#: src/infrastructure/ui/appstream_page.py:432
-#: src/infrastructure/ui/shared/app_list_grid_shared.py:150
-#: src/infrastructure/ui/shared/app_list_line_shared.py:150
+#: src/infrastructure/ui/appstream_page.py:435
+#: src/infrastructure/ui/shared/app_list_grid_shared.py:151
+#: src/infrastructure/ui/shared/app_list_line_shared.py:151
 msgid "Install with recipe"
 msgstr "Mit Rezept installieren"
 
-#: src/infrastructure/ui/appstream_page.py:660
-#: src/infrastructure/ui/shared/installed_list_shared.py:112
+#: src/infrastructure/ui/appstream_page.py:649
+#: src/infrastructure/ui/shared/installed_list_shared.py:105
 msgid "Apply"
 msgstr "Anwenden"
 
-#: src/infrastructure/ui/appstream_page.py:679
+#: src/infrastructure/ui/appstream_page.py:667
 msgid "Screenshots"
 msgstr "Bildschirmfotos"
 
-#: src/infrastructure/ui/appstream_page.py:879
+#: src/infrastructure/ui/appstream_page.py:867
 msgid "Release History"
 msgstr "Versionsgeschichte"
 
@@ -509,7 +509,7 @@ msgid "Edit permissions"
 msgstr "Berechtigungen bearbeiten"
 
 #: src/infrastructure/ui/bundle_detail_page.py:182
-#: src/infrastructure/ui/bundle_detail_page.py:267
+#: src/infrastructure/ui/bundle_detail_page.py:269
 #: src/infrastructure/ui/menu/import_dialog.py:120
 #: src/infrastructure/ui/menu/import_dialog.py:126
 msgid "Already installed"
@@ -927,6 +927,81 @@ msgstr "Ton erlauben (PulseAudio)"
 
 msgid "recipe_should_install_openrgb_effects_plugin"
 msgstr "OpenRGB-Effects-Plugin installieren"
+
+msgid "recipe_should_install_gamescope"
+msgstr "Gamescope installieren (Mikro-Compositor für Spiele)"
+
+msgid "recipe_should_install_obs_vkcapture_layer"
+msgstr "OBS-Spielaufnahme-Layer installieren (OBS VkCapture)"
+
+msgid "recipe_enable_obs_vkcapture"
+msgstr "OBS-Spielaufnahme für alle Spiele aktivieren"
+
+msgid "recipe_should_install_proton_ge"
+msgstr "Proton-GE installieren (bessere Spielekompatibilität)"
+
+msgid "recipe_should_install_protonup"
+msgstr "ProtonUp-Qt installieren, um Proton/Wine-Versionen zu verwalten"
+
+msgid "recipe_indicate_your_recording_path_label"
+msgstr "Geben Sie den Pfad des Verzeichnisses an, in dem Sie Ihre Aufnahmen speichern"
+
+msgid "recipe_should_install_obs_plugin_vkcapture"
+msgstr "Spielaufnahme-Plugin installieren (Vulkan/OpenGL)"
+
+msgid "recipe_should_install_obs_plugin_pipewire_audio"
+msgstr "Plugin für Audioaufnahme pro Anwendung installieren (PipeWire)"
+
+msgid "recipe_should_install_obs_plugin_gstreamer_vaapi"
+msgstr "Plugin für Hardware-Kodierung installieren (GStreamer VA-API)"
+
+msgid "recipe_should_install_obs_plugin_background_removal"
+msgstr "Plugin zum Entfernen des Hintergrunds installieren"
+
+msgid "recipe_should_install_obs_plugin_move_transition"
+msgstr "Plugin für Move-Übergänge installieren"
+
+msgid "recipe_should_install_obs_plugin_scene_switcher"
+msgstr "Plugin Advanced Scene Switcher installieren"
+
+msgid "recipe_should_install_obs_plugin_wayland_hotkeys"
+msgstr "Plugin für globale Tastenkürzel unter Wayland installieren"
+
+msgid "recipe_should_install_gimp_plugin_gmic"
+msgstr "G'MIC-Filter-Plugin installieren"
+
+msgid "recipe_should_install_gimp_plugin_resynthesizer"
+msgstr "Resynthesizer-Plugin installieren (inhaltsbasiertes Füllen)"
+
+msgid "recipe_should_install_gimp_plugin_fourier"
+msgstr "Fourier-Transformations-Plugin installieren"
+
+msgid "recipe_should_install_lsp_plugins"
+msgstr "LSP-Audio-Plugins installieren"
+
+msgid "recipe_should_install_calf_plugins"
+msgstr "Calf-Audio-Plugins installieren"
+
+msgid "recipe_should_install_x42_plugins"
+msgstr "x42-Audio-Plugins installieren"
+
+msgid "recipe_indicate_your_projects_path_label"
+msgstr "Geben Sie den Pfad des Verzeichnisses an, in dem Sie Ihre Projekte speichern"
+
+msgid "recipe_should_install_sdk_node"
+msgstr "Node.js installieren (SDK-Erweiterung)"
+
+msgid "recipe_should_install_sdk_golang"
+msgstr "Go installieren (SDK-Erweiterung)"
+
+msgid "recipe_should_install_sdk_rust"
+msgstr "Rust installieren (SDK-Erweiterung)"
+
+msgid "recipe_should_install_sdk_openjdk"
+msgstr "OpenJDK 21 installieren (SDK-Erweiterung)"
+
+msgid "recipe_enable_sdk_extensions"
+msgstr "Installierte SDK-Erweiterungen im Editor aktivieren"
 
 msgid "Gaming"
 msgstr "Spiele"

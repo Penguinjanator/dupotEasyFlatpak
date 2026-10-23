@@ -10,14 +10,47 @@
         {
             "label": "recipe_should_installMangoHud",
             "type": "install_flatpak_yesno",
-            "value": "org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08"
+            "value": "org.freedesktop.Platform.VulkanLayer.MangoHud"
         },
         {
             "label": "recipe_enable_mangohud",
             "type": "env_yesno",
             "value": "MANGOHUD",
             "subValueYes": "1",
-            "subValueNo": "0"
+            "subValueNo": "0",
+            "default": false
+        },
+        {
+            "label": "recipe_should_install_gamescope",
+            "type": "install_flatpak_yesno",
+            "value": "org.freedesktop.Platform.VulkanLayer.gamescope",
+            "default": false
+        },
+        {
+            "label": "recipe_should_install_obs_vkcapture_layer",
+            "type": "install_flatpak_yesno",
+            "value": "org.freedesktop.Platform.VulkanLayer.OBSVkCapture",
+            "default": false
+        },
+        {
+            "label": "recipe_enable_obs_vkcapture",
+            "type": "env_yesno",
+            "value": "OBS_VKCAPTURE",
+            "subValueYes": "1",
+            "subValueNo": "0",
+            "default": false
+        },
+        {
+            "label": "recipe_should_install_proton_ge",
+            "type": "install_flatpak_yesno",
+            "value": "com.valvesoftware.Steam.CompatibilityTool.Proton-GE",
+            "default": false
+        },
+        {
+            "label": "recipe_should_install_protonup",
+            "type": "install_flatpak_yesno",
+            "value": "net.davidotek.pupgui2",
+            "default": false
         }
     ]
 }

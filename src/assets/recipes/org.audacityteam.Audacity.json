@@ -1,0 +1,24 @@
+{
+    "title": "Audacity",
+    "description": "Audio editor and recorder",
+    "flatpak": "org.audacityteam.Audacity",
+    "flatpakPermissionToOverrideList": [
+        {
+            "label": "recipe_should_install_lsp_plugins",
+            "type": "install_flatpak_yesno",
+            "value": "org.freedesktop.LinuxAudio.Plugins.LSP"
+        },
+        {
+            "label": "recipe_should_install_calf_plugins",
+            "type": "install_flatpak_yesno",
+            "value": "org.freedesktop.LinuxAudio.Plugins.Calf",
+            "default": false
+        },
+        {
+            "label": "recipe_should_install_x42_plugins",
+            "type": "install_flatpak_yesno",
+            "value": "org.freedesktop.LinuxAudio.Plugins.x42Plugins",
+            "default": false
+        }
+    ]
+}

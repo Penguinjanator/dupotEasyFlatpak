@@ -20,7 +20,10 @@ from gi.repository import Gtk, Adw, GLib, Gdk, Gio
 import domain.conf.app_state as app_state
 from domain.entity.appstream_long_entity import AppstreamLongEntity
 from infrastructure.repository.appstream_repository import AppstreamRepository
-from infrastructure.service.forge_install_service import install_latest_forge_flatpak
+from infrastructure.service.recipe_apply_service import (
+    apply_recipe_overrides_async,
+    apply_recipe_permission_list,
+)
 from infrastructure.service.install_queue_service import InstallQueueService
 from infrastructure.ui.shared.icons_shared import IconsShared
 from infrastructure.ui.appstream.downgrade_dialog import DowngradeDialog
@@ -533,20 +536,14 @@ class AppstreamPage(Adw.NavigationPage):
                 fallback_scope = "--user" if user_scope else "--system"
                 scope = FlatpakRepoRepository().get_scope_flag(selected_repo_id, fallback_scope)
                 flags = [scope]
-                dependencies_ok = True
                 _stream(flatpak_api.get_install_call(app_id, selected_repo_id, *flags))
-                for perm, value in active_permission_list:
-                    override_call = flatpak_api.get_recipe_override_call(app_id, perm, value)
-                    if override_call:
-                        _stream(override_call)
-                    elif perm.is_install_flatpak_yes_no():
-                        _stream(flatpak_api.get_install_call(perm.get_value(), "flathub", fallback_scope))
-                    elif perm.is_install_forge_flatpak_yes_no():
-                        dependencies_ok &= install_latest_forge_flatpak(
-                            perm.get_value(),
-                            fallback_scope,
-                            lambda line: GLib.idle_add(queue_item.append_output, line),
-                        )
+                dependencies_ok = apply_recipe_permission_list(
+                    app_id,
+                    active_permission_list,
+                    scope,
+                    lambda line: GLib.idle_add(queue_item.append_output, line),
+                    flatpak_api,
+                )
                 result = flatpak_api.get_info_by_id(app_id)
                 final_status = (
                     "done" if result.returncode == 0 and dependencies_ok else "failed"
@@ -638,18 +635,10 @@ class AppstreamPage(Adw.NavigationPage):
         threading.Thread(target=fetch, daemon=True).start()
 
     def _on_recipe_overrides_clicked(self, _btn: Gtk.Button, app_id: str):
-        current_fs = FlatpakApi().get_override_filesystems(app_id)
-        current_sockets = FlatpakApi().get_override_sockets(app_id)
+        current_overrides = FlatpakApi().get_current_overrides(app_id)
 
         def on_confirm(_user_scope, active_permission_list, _repo_id):
-            def run_overrides():
-                flatpak_api = FlatpakApi()
-                for perm, value in active_permission_list:
-                    override_call = flatpak_api.get_recipe_override_call(app_id, perm, value)
-                    if override_call:
-                        subprocess.run(override_call)
-
-            threading.Thread(target=run_overrides, daemon=True).start()
+            apply_recipe_overrides_async(app_id, self.get_title(), active_permission_list)
 
         dialog = InstallDialog(
             app_id,
@@ -659,8 +648,7 @@ class AppstreamPage(Adw.NavigationPage):
             heading=_("Recipe overrides"),
             confirm_label=_("Apply"),
             show_scope=False,
-            filesystem_override_values=current_fs,
-            socket_override_values=current_sockets,
+            current_overrides=current_overrides,
         )
         dialog.present(self)
 

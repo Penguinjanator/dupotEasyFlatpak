@@ -1,0 +1,43 @@
+{
+    "title": "VSCodium",
+    "description": "Free/Libre Open Source Software Binaries of VS Code",
+    "flatpak": "com.vscodium.codium",
+    "flatpakPermissionToOverrideList": [
+        {
+            "label": "recipe_indicate_your_projects_path_label",
+            "type": "filesystem"
+        },
+        {
+            "label": "recipe_should_install_sdk_node",
+            "type": "install_flatpak_yesno",
+            "value": "org.freedesktop.Sdk.Extension.node22",
+            "default": false
+        },
+        {
+            "label": "recipe_should_install_sdk_golang",
+            "type": "install_flatpak_yesno",
+            "value": "org.freedesktop.Sdk.Extension.golang",
+            "default": false
+        },
+        {
+            "label": "recipe_should_install_sdk_rust",
+            "type": "install_flatpak_yesno",
+            "value": "org.freedesktop.Sdk.Extension.rust-stable",
+            "default": false
+        },
+        {
+            "label": "recipe_should_install_sdk_openjdk",
+            "type": "install_flatpak_yesno",
+            "value": "org.freedesktop.Sdk.Extension.openjdk21",
+            "default": false
+        },
+        {
+            "label": "recipe_enable_sdk_extensions",
+            "type": "env_yesno",
+            "value": "FLATPAK_ENABLE_SDK_EXT",
+            "subValueYes": "node22,golang,rust-stable,openjdk21",
+            "subValueNo": "",
+            "default": false
+        }
+    ]
+}

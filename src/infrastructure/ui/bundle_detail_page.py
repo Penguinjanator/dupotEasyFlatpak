@@ -20,7 +20,7 @@ from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.recipe_repository import RecipeRepository
 from infrastructure.repository.flatpakrepo_repository import FlatpakRepoRepository
-from infrastructure.service.forge_install_service import install_latest_forge_flatpak
+from infrastructure.service.recipe_apply_service import apply_recipe_permission_list
 
 
 class BundleDetailPage(Adw.NavigationPage):
@@ -235,30 +235,34 @@ class BundleDetailPage(Adw.NavigationPage):
 
                 path_row.add_suffix(row)
 
-                if self.user_settings_entity.has_game_path():
+                if perm.get_label() in stored:
+                    row.set_text(stored[perm.get_label()])
+                elif perm.is_game_path() and self.user_settings_entity.has_game_path():
                     row.set_text(self.user_settings_entity.installation_game_path)
+                else:
+                    row.set_text(perm.get_value())
 
                 perm_group.add(path_row)
                 permission_rows.append((row, perm))
 
-            elif perm.is_filesystem_no_prompt():
-                row = Adw.EntryRow()
-                row.set_title(_(perm.get_label()))
-                row.set_text(stored.get(perm.get_label()) or perm.get_value())
-                perm_group.add(row)
-                permission_rows.append((row, perm))
-
-            elif perm.is_sound():
+            elif perm.is_toggle() or perm.is_env_yes_no():
                 row = Adw.SwitchRow()
                 row.set_title(_(perm.get_label()))
-                row.set_active(perm.get_label() in stored if stored else True)
+                row.set_subtitle(
+                    perm.get_toggle_flag(True) if perm.is_toggle() else perm.get_env_flag(True)
+                )
+                row.set_active(
+                    perm.get_label() in stored if stored else perm.is_active_by_default()
+                )
                 perm_group.add(row)
                 permission_rows.append((row, perm))
 
             elif perm.is_install_yes_no():
                 row = Adw.SwitchRow()
                 row.set_title(_(perm.get_label()))
-                row.set_active(perm.get_label() in stored if stored else True)
+                row.set_active(
+                    perm.get_label() in stored if stored else perm.is_active_by_default()
+                )
                 install_icon = IconsShared().get_icon_by_name(IconsShared.ICON_PENDING)
                 install_icon.set_valign(Gtk.Align.CENTER)
                 row.add_prefix(install_icon)
@@ -271,9 +275,7 @@ class BundleDetailPage(Adw.NavigationPage):
                 permission_rows.append((row, perm))
 
         filesystem_entry_rows = [
-            row
-            for row, perm in permission_rows
-            if perm.is_filesystem() or perm.is_filesystem_no_prompt()
+            row for row, perm in permission_rows if perm.is_filesystem()
         ]
 
         def _validate(*_args):
@@ -295,13 +297,15 @@ class BundleDetailPage(Adw.NavigationPage):
         def on_response(_d, response):
             if response != "ok":
                 return
-            active_list = []
+            active_list = [
+                (perm, None) for perm in permissions if perm.is_filesystem_no_prompt()
+            ]
             for row, perm in permission_rows:
                 if perm.is_filesystem():
                     value = row.get_text().strip()
                     if value:
                         active_list.append((perm, value))
-                elif perm.is_sound():
+                elif perm.is_toggle() or perm.is_env_yes_no():
                     if row.get_active():
                         active_list.append((perm, True))
                 elif perm.is_install_yes_no():
@@ -338,10 +342,11 @@ class BundleDetailPage(Adw.NavigationPage):
                 app_id
             ):
                 active_permissions = [
-                    (p, p.get_value())
+                    (p, None)
                     for p in self._get_recipe.get_permission_to_override_list_by_id(
                         app_id
                     )
+                    if p.is_active_by_default()
                 ]
             else:
                 active_permissions = self._app_permissions.get(app_id, [])
@@ -368,20 +373,14 @@ class BundleDetailPage(Adw.NavigationPage):
                 repo_scope_flag = FlatpakRepoRepository().get_scope_flag(
                     repo_id, fallback_scope_flag
                 )
-                dependencies_ok = True
                 _stream(flatpak_api.get_install_call(aid, repo_id, repo_scope_flag))
-                for perm, value in perms:
-                    override_call = flatpak_api.get_recipe_override_call(aid, perm, value)
-                    if override_call:
-                        _stream(override_call)
-                    elif perm.is_install_flatpak_yes_no():
-                        _stream(flatpak_api.get_install_call(perm.get_value(), "flathub", fallback_scope_flag))
-                    elif perm.is_install_forge_flatpak_yes_no():
-                        dependencies_ok &= install_latest_forge_flatpak(
-                            perm.get_value(),
-                            fallback_scope_flag,
-                            lambda line: GLib.idle_add(item.append_output, line),
-                        )
+                dependencies_ok = apply_recipe_permission_list(
+                    aid,
+                    perms,
+                    repo_scope_flag,
+                    lambda line: GLib.idle_add(item.append_output, line),
+                    flatpak_api,
+                )
                 result = FlatpakApi().get_info_by_id(aid)
                 GLib.idle_add(
                     item.set_status,

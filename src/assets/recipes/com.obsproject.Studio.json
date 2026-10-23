@@ -1,0 +1,50 @@
+{
+    "title": "OBS Studio",
+    "description": "Live streaming and video recording software",
+    "flatpak": "com.obsproject.Studio",
+    "flatpakPermissionToOverrideList": [
+        {
+            "label": "recipe_indicate_your_recording_path_label",
+            "type": "filesystem"
+        },
+        {
+            "label": "recipe_should_install_obs_plugin_vkcapture",
+            "type": "install_flatpak_yesno",
+            "value": "com.obsproject.Studio.Plugin.OBSVkCapture"
+        },
+        {
+            "label": "recipe_should_install_obs_plugin_pipewire_audio",
+            "type": "install_flatpak_yesno",
+            "value": "com.obsproject.Studio.Plugin.PipeWireAudioCapture"
+        },
+        {
+            "label": "recipe_should_install_obs_plugin_gstreamer_vaapi",
+            "type": "install_flatpak_yesno",
+            "value": "com.obsproject.Studio.Plugin.GStreamerVaapi"
+        },
+        {
+            "label": "recipe_should_install_obs_plugin_background_removal",
+            "type": "install_flatpak_yesno",
+            "value": "com.obsproject.Studio.Plugin.BackgroundRemoval",
+            "default": false
+        },
+        {
+            "label": "recipe_should_install_obs_plugin_move_transition",
+            "type": "install_flatpak_yesno",
+            "value": "com.obsproject.Studio.Plugin.MoveTransition",
+            "default": false
+        },
+        {
+            "label": "recipe_should_install_obs_plugin_scene_switcher",
+            "type": "install_flatpak_yesno",
+            "value": "com.obsproject.Studio.Plugin.SceneSwitcher",
+            "default": false
+        },
+        {
+            "label": "recipe_should_install_obs_plugin_wayland_hotkeys",
+            "type": "install_flatpak_yesno",
+            "value": "com.obsproject.Studio.Plugin.WaylandHotkeys",
+            "default": false
+        }
+    ]
+}

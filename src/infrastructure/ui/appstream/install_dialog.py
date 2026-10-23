@@ -25,8 +25,7 @@ class InstallDialog(Adw.AlertDialog):
         heading: str = None,
         confirm_label: str = None,
         show_scope: bool = True,
-        filesystem_override_values: list = None,
-        socket_override_values: list = None,  # current overridden sockets — set when editing overrides of an installed app
+        current_overrides: dict = None,  # FlatpakApi.get_current_overrides() — set when editing overrides of an installed app
         locked_scope: str = None,  # "--user"/"--system" when the app's repo pins it, else None
         repo_id_list: list = None,  # flatpak remote ids this app is available from — the literal ids flatpak uses, e.g. "flathub"
     ):
@@ -84,18 +83,28 @@ class InstallDialog(Adw.AlertDialog):
         else:
             self._user_scope_row = None
 
+        # Applied without asking (e.g. Discord's home access)
+        self._no_prompt_permissions = []
+
         if has_recipe:
             permissions = get_recipe_content.get_permission_to_override_list_by_id(
                 app_id
             )
-            if permissions:
+            self._no_prompt_permissions = [
+                p for p in permissions if p.is_filesystem_no_prompt()
+            ]
+            prompt_permissions = [
+                p for p in permissions if not p.is_filesystem_no_prompt()
+            ]
+            if prompt_permissions:
                 perm_group = Adw.PreferencesGroup()
                 perm_group.set_title(_("Permissions"))
+                filesystem_override_values = (
+                    current_overrides.get("filesystems", []) if current_overrides else []
+                )
                 _fs_index = 0
-                for perm in permissions:
-                    if perm.is_filesystem_no_prompt():
-                        continue
-                    elif perm.is_filesystem():
+                for perm in prompt_permissions:
+                    if perm.is_filesystem():
                         path_row = Adw.ActionRow(title=_(perm.get_label()))
 
                         row = Gtk.Entry()
@@ -104,36 +113,58 @@ class InstallDialog(Adw.AlertDialog):
 
                         path_row.add_suffix(row)
 
-                        if user_settings_entity.has_game_path():
-                            row.set_text(user_settings_entity.installation_game_path)
-                        elif filesystem_override_values and _fs_index < len(
-                            filesystem_override_values
-                        ):
+                        # Current override first (editing), then the game
+                        # path setting (games directory only), then the default
+                        if _fs_index < len(filesystem_override_values):
                             row.set_text(filesystem_override_values[_fs_index])
+                        elif perm.is_game_path() and user_settings_entity.has_game_path():
+                            row.set_text(user_settings_entity.installation_game_path)
                         else:
                             row.set_text(perm.get_value())
                         _fs_index += 1
                         perm_group.add(path_row)
                         self._permission_rows.append((row, perm))
-                    elif perm.is_sound():
+                    elif perm.is_toggle():
                         row = Adw.SwitchRow()
                         row.set_title(_(perm.get_label()))
-                        if socket_override_values is None:
-                            initially_active = True
+                        row.set_subtitle(perm.get_toggle_flag(True))
+                        if current_overrides is None:
+                            initially_active = perm.is_active_by_default()
                         else:
-                            initially_active = perm.get_value() in socket_override_values
+                            initially_active = perm.get_value() in current_overrides.get(
+                                perm.get_toggle_metadata_key(), []
+                            )
                         row.set_active(initially_active)
-                        # Only revoke (--nosocket) a sound override we granted
-                        # earlier — never deny a socket the app ships with.
+                        # Only revoke (--nosocket…) an override we granted
+                        # earlier — never deny a permission the app ships with.
                         row._initially_overridden = (
-                            socket_override_values is not None and initially_active
+                            current_overrides is not None and initially_active
                         )
+                        perm_group.add(row)
+                        self._permission_rows.append((row, perm))
+                    elif perm.is_env_yes_no():
+                        row = Adw.SwitchRow()
+                        row.set_title(_(perm.get_label()))
+                        row.set_subtitle(perm.get_env_flag(True))
+                        current_env = (
+                            current_overrides.get("environment", {}).get(perm.get_value())
+                            if current_overrides
+                            else None
+                        )
+                        if current_overrides is None:
+                            initially_active = perm.is_active_by_default()
+                        else:
+                            initially_active = current_env == perm.get_sub_value(True)
+                        row.set_active(initially_active)
+                        # Only write the "no" value over a variable we set
+                        row._initially_overridden = current_env is not None
                         perm_group.add(row)
                         self._permission_rows.append((row, perm))
                     elif perm.is_install_yes_no():
                         row = Adw.SwitchRow()
                         row.set_title(_(perm.get_label()))
-                        row.set_active(True)
+                        row.set_subtitle(perm.get_value())
+                        row.set_active(perm.is_active_by_default())
                         install_icon = IconsShared().get_icon_by_name(
                             IconsShared.ICON_PENDING
                         )
@@ -188,13 +219,13 @@ class InstallDialog(Adw.AlertDialog):
         user_scope = (
             self._user_scope_row.get_active() if self._user_scope_row else False
         )
-        active_permission_list = []
+        active_permission_list = [(perm, None) for perm in self._no_prompt_permissions]
         for row, perm in self._permission_rows:
             if perm.is_filesystem():
                 value = row.get_text().strip()
                 if value:
                     active_permission_list.append((perm, value))
-            elif perm.is_sound():
+            elif perm.is_toggle() or perm.is_env_yes_no():
                 if row.get_active():
                     active_permission_list.append((perm, True))
                 elif row._initially_overridden:

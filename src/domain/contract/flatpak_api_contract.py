@@ -71,7 +71,23 @@ class FlatpakApiContract:
         pass
 
     @abstractmethod
+    def get_metadata_values(self, app_id: str, key: str) -> list[str]:
+        pass
+
+    @abstractmethod
+    def get_current_overrides(self, app_id: str) -> dict:
+        pass
+
+    @abstractmethod
     def get_recipe_override_call(self, app_id: str, perm, value) -> list | None:
+        pass
+
+    @abstractmethod
+    def get_extension_ref(self, app_id: str, extension_id: str) -> str:
+        pass
+
+    @abstractmethod
+    def is_ref_installed(self, ref: str) -> bool:
         pass
 
     @abstractmethod

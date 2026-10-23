@@ -6,6 +6,7 @@ from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.recipe_repository import RecipeRepository
 from infrastructure.repository.flatpakrepo_repository import FlatpakRepoRepository
 from infrastructure.service.install_queue_service import InstallQueueService
+from infrastructure.service.recipe_apply_service import apply_recipe_permission_list
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
@@ -179,14 +180,17 @@ def _make_list_card(
                     for line in process.stdout:
                         GLib.idle_add(queue_item.append_output, line)
                     process.wait()
-                    for perm, value in active_permission_list:
-                        override_call = flatpak_api.get_recipe_override_call(app.id, perm, value)
-                        if override_call:
-                            subprocess.run(override_call)
+                    dependencies_ok = apply_recipe_permission_list(
+                        app.id,
+                        active_permission_list,
+                        scope,
+                        lambda line: GLib.idle_add(queue_item.append_output, line),
+                        flatpak_api,
+                    )
                     result = flatpak_api.get_info_by_id(app.id)
                     GLib.idle_add(
                         queue_item.set_status,
-                        "done" if result.returncode == 0 else "failed",
+                        "done" if result.returncode == 0 and dependencies_ok else "failed",
                     )
 
                 threading.Thread(target=run_install, daemon=True).start()

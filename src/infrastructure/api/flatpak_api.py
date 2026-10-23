@@ -226,51 +226,130 @@ class FlatpakApi(FlatpakApiContract):
     def get_override_sockets(self, app_id: str) -> list[str]:
         return self._get_override_values(app_id, "sockets")
 
+    def get_current_overrides(self, app_id: str) -> dict:
+        """User overrides of an installed app, as read by InstallDialog when
+        editing a recipe: {"filesystems", "sockets", "devices", "shared": [..],
+        "environment": {VAR: value}}."""
+        sections = self._parse_keyfile(
+            subprocess.run(
+                self._cmd("override", "--user", "--show", app_id),
+                capture_output=True,
+                text=True,
+            ).stdout
+        )
+        context = sections.get("Context", {})
+        overrides = {
+            key: [v for v in context.get(key, "").split(";") if v.strip()]
+            for key in ("filesystems", "sockets", "devices", "shared")
+        }
+        overrides["environment"] = sections.get("Environment", {})
+        return overrides
+
     def get_recipe_override_call(self, app_id: str, perm, value) -> list | None:
         """`flatpak override` command for a recipe permission, or None when
         the permission isn't an override (e.g. install_flatpak_yesno).
-        For sound, `value` is False to revoke; anything else grants."""
-        if perm.is_filesystem():
-            return self.get_override_filesystem_call(app_id, value)
-        if perm.is_sound():
-            socket = perm.get_value()
-            if value is False and socket in self.get_metadata_sockets(app_id):
+        For toggles (sound/socket/device/share) and env, `value` is False to
+        revoke; anything else grants."""
+        if perm.is_filesystem() or perm.is_filesystem_no_prompt():
+            filesystem = value or perm.get_value()
+            if not filesystem:
+                return []
+            return self.get_override_filesystem_call(app_id, filesystem)
+        if perm.is_toggle():
+            if value is False and perm.get_value() in self.get_metadata_values(
+                app_id, perm.get_toggle_metadata_key()
+            ):
                 # `flatpak override` can't drop a single key, and --nosocket
                 # would deny a socket the app itself ships with. Our grant
                 # is then redundant with the manifest: leave it.
                 return []
-            return self.get_override_socket_call(app_id, socket, value is not False)
+            return self._cmd(
+                "override", "--user", app_id, perm.get_toggle_flag(value is not False)
+            )
+        if perm.is_env_yes_no():
+            return self._cmd("override", "--user", app_id, perm.get_env_flag(value is not False))
         return None
 
     def get_metadata_sockets(self, app_id: str) -> list[str]:
         """Sockets granted by the app's own manifest (overrides excluded)."""
-        result = subprocess.run(
-            self._cmd("info", "--show-metadata", app_id),
-            capture_output=True,
-            text=True,
+        return self.get_metadata_values(app_id, "sockets")
+
+    def get_metadata_values(self, app_id: str, key: str) -> list[str]:
+        """Values of a [Context] key (sockets, devices, shared…) granted by
+        the app's own manifest (overrides excluded)."""
+        raw = self._get_metadata(app_id).get("Context", {}).get(key, "")
+        return [v for v in raw.split(";") if v.strip()]
+
+    def get_extension_ref(self, app_id: str, extension_id: str) -> str:
+        """Ref to install an extension (plugin, Vulkan layer…) so it actually
+        gets loaded by `app_id`: an extension is only mounted when its branch
+        matches the extension point's `version`, e.g. a MangoHud 24.08 layer
+        is ignored by an app on the 25.08 runtime. The extension point is
+        looked up in the app's metadata, then its runtime's. An explicit
+        "id//branch" (or "id/arch/branch") is kept as is, and the bare id is
+        returned when no extension point matches."""
+        if "/" in extension_id:
+            return extension_id
+        app_ref = self._get_ref(app_id)
+        runtime_ref = subprocess.run(
+            self._cmd("info", "--show-runtime", app_id), capture_output=True, text=True
+        ).stdout.strip()
+        for owner_ref in (app_ref, runtime_ref):
+            if not owner_ref:
+                continue
+            best_point = None
+            for section, values in self._get_metadata(owner_ref).items():
+                if not section.startswith("Extension "):
+                    continue
+                point = section[len("Extension ") :]
+                if extension_id != point and not extension_id.startswith(point + "."):
+                    continue
+                if best_point is None or len(point) > len(best_point[0]):
+                    best_point = (point, values)
+            if best_point:
+                values = best_point[1]
+                # No version: the extension follows the owner ref's branch
+                branch = (
+                    values.get("version")
+                    or values.get("versions", "").split(";")[0]
+                    or owner_ref.split("/")[-1]
+                )
+                return f"{extension_id}//{branch}"
+        return extension_id
+
+    def is_ref_installed(self, ref: str) -> bool:
+        return subprocess.run(self._cmd("info", ref), capture_output=True).returncode == 0
+
+    def _get_ref(self, app_id: str) -> str:
+        return subprocess.run(
+            self._cmd("info", "--show-ref", app_id), capture_output=True, text=True
+        ).stdout.strip()
+
+    def _get_metadata(self, ref: str) -> dict[str, dict[str, str]]:
+        return self._parse_keyfile(
+            subprocess.run(
+                self._cmd("info", "--show-metadata", ref), capture_output=True, text=True
+            ).stdout
         )
-        in_context = False
-        for line in result.stdout.splitlines():
+
+    def _parse_keyfile(self, content: str) -> dict[str, dict[str, str]]:
+        # Not configparser: keys are case-sensitive (env vars) and runtime
+        # metadata writes "key = value" while app metadata writes "key=value".
+        sections = {}
+        current = None
+        for line in content.splitlines():
             line = line.strip()
-            if line.startswith("["):
-                in_context = line == "[Context]"
-            elif in_context and line.startswith("sockets="):
-                raw = line[len("sockets=") :]
-                return [v for v in raw.split(";") if v.strip()]
-        return []
+            if not line or line.startswith("#"):
+                continue
+            if line.startswith("[") and line.endswith("]"):
+                current = sections.setdefault(line[1:-1], {})
+            elif current is not None and "=" in line:
+                key, value = line.split("=", 1)
+                current[key.strip()] = value.strip().rstrip(";")
+        return sections
 
     def _get_override_values(self, app_id: str, key: str) -> list[str]:
-        result = subprocess.run(
-            self._cmd("override", "--user", "--show", app_id),
-            capture_output=True,
-            text=True,
-        )
-        prefix = f"{key}="
-        for line in result.stdout.splitlines():
-            if line.startswith(prefix):
-                raw = line[len(prefix) :].rstrip(";")
-                return [v for v in raw.split(";") if v.strip()]
-        return []
+        return self.get_current_overrides(app_id).get(key, [])
 
     def get_installation_scope(self, app_id: str) -> str:
         result = subprocess.run(

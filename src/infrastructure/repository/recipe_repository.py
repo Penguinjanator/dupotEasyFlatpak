@@ -1,3 +1,5 @@
+import os
+
 from domain.conf.path_conf import PathConf
 from domain.contract.recipe_repository_contract import RecipeRepositoryContract
 from domain.entity.recipe_entity import RecipeEntity
@@ -20,7 +22,17 @@ class RecipeRepository(RecipeRepositoryContract):
         pass
 
     def _get_path_to_id(self, id: str) -> str:
-        return PathConf().get_path_list_join([self._recipes_path, id + ".json"])
+        # get_file_list() lowercases names, so look the real file name up
+        # case-insensitively, like has_id() does
+        file_name = next(
+            (
+                name
+                for name in os.listdir(self._recipes_path)
+                if name.lower() == id.lower() + ".json"
+            ),
+            id + ".json",
+        )
+        return PathConf().get_path_list_join([self._recipes_path, file_name])
 
     def has_id(self, id: str) -> bool:
         return id.lower() + ".json" in self._recipe_file_list

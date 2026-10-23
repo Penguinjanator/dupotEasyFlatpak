@@ -55,6 +55,81 @@ msgstr ""
 msgid "recipe_should_install_openrgb_effects_plugin"
 msgstr ""
 
+msgid "recipe_should_install_gamescope"
+msgstr ""
+
+msgid "recipe_should_install_obs_vkcapture_layer"
+msgstr ""
+
+msgid "recipe_enable_obs_vkcapture"
+msgstr ""
+
+msgid "recipe_should_install_proton_ge"
+msgstr ""
+
+msgid "recipe_should_install_protonup"
+msgstr ""
+
+msgid "recipe_indicate_your_recording_path_label"
+msgstr ""
+
+msgid "recipe_should_install_obs_plugin_vkcapture"
+msgstr ""
+
+msgid "recipe_should_install_obs_plugin_pipewire_audio"
+msgstr ""
+
+msgid "recipe_should_install_obs_plugin_gstreamer_vaapi"
+msgstr ""
+
+msgid "recipe_should_install_obs_plugin_background_removal"
+msgstr ""
+
+msgid "recipe_should_install_obs_plugin_move_transition"
+msgstr ""
+
+msgid "recipe_should_install_obs_plugin_scene_switcher"
+msgstr ""
+
+msgid "recipe_should_install_obs_plugin_wayland_hotkeys"
+msgstr ""
+
+msgid "recipe_should_install_gimp_plugin_gmic"
+msgstr ""
+
+msgid "recipe_should_install_gimp_plugin_resynthesizer"
+msgstr ""
+
+msgid "recipe_should_install_gimp_plugin_fourier"
+msgstr ""
+
+msgid "recipe_should_install_lsp_plugins"
+msgstr ""
+
+msgid "recipe_should_install_calf_plugins"
+msgstr ""
+
+msgid "recipe_should_install_x42_plugins"
+msgstr ""
+
+msgid "recipe_indicate_your_projects_path_label"
+msgstr ""
+
+msgid "recipe_should_install_sdk_node"
+msgstr ""
+
+msgid "recipe_should_install_sdk_golang"
+msgstr ""
+
+msgid "recipe_should_install_sdk_rust"
+msgstr ""
+
+msgid "recipe_should_install_sdk_openjdk"
+msgstr ""
+
+msgid "recipe_enable_sdk_extensions"
+msgstr ""
+
 
 msgid "Gaming"
 msgstr ""

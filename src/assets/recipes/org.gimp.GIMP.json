@@ -1,0 +1,23 @@
+{
+    "title": "GIMP",
+    "description": "GNU Image Manipulation Program",
+    "flatpak": "org.gimp.GIMP",
+    "flatpakPermissionToOverrideList": [
+        {
+            "label": "recipe_should_install_gimp_plugin_gmic",
+            "type": "install_flatpak_yesno",
+            "value": "org.gimp.GIMP.Plugin.GMic"
+        },
+        {
+            "label": "recipe_should_install_gimp_plugin_resynthesizer",
+            "type": "install_flatpak_yesno",
+            "value": "org.gimp.GIMP.Plugin.Resynthesizer"
+        },
+        {
+            "label": "recipe_should_install_gimp_plugin_fourier",
+            "type": "install_flatpak_yesno",
+            "value": "org.gimp.GIMP.Plugin.Fourier",
+            "default": false
+        }
+    ]
+}
